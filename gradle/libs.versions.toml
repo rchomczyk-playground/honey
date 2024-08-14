@@ -1,5 +1,5 @@
 [versions]
-allegro-opel = "1.1.8"
+allegro-opel = "1.1.14"
 apache-commons-lang3 = "3.16.0"
 spotify-completable-futures = "0.3.6"
 adventure = "4.17.0"
