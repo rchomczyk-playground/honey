@@ -1,0 +1,22 @@
+name: Publish honey
+on:
+  push:
+    branches: [ master ]
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'adopt'
+          cache: 'gradle'
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Publish with Gradle
+        run: ./gradlew clean build publish
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
