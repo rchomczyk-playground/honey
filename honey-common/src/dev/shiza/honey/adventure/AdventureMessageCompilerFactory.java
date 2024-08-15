@@ -2,17 +2,19 @@ package dev.shiza.honey.adventure;
 
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 
+import dev.shiza.honey.message.MessageCompiler;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
-final class AdventureMessageCompilerFactory {
+public final class AdventureMessageCompilerFactory {
 
   private AdventureMessageCompilerFactory() {}
 
-  static AdventureMessageCompiler create(final MiniMessage miniMessage) {
+  public static MessageCompiler<Component> create(final MiniMessage miniMessage) {
     return new AdventureMessageCompiler(miniMessage);
   }
 
-  static AdventureMessageCompiler create() {
+  public static MessageCompiler<Component> create() {
     return new AdventureMessageCompiler(miniMessage());
   }
 }

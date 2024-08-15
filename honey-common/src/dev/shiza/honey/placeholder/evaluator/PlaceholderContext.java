@@ -34,6 +34,10 @@ public class PlaceholderContext {
     return this;
   }
 
+  public CompletableFuture<?> getValue(final String valueName) {
+    return values.get(valueName);
+  }
+
   public Map<String, CompletableFuture<?>> getValues() {
     return values;
   }

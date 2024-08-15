@@ -1,13 +1,9 @@
 package dev.shiza.honey.opel;
 
-import com.spotify.futures.CompletableFutures;
 import dev.shiza.honey.placeholder.evaluator.EvaluatedPlaceholder;
 import dev.shiza.honey.placeholder.evaluator.PlaceholderContext;
 import dev.shiza.honey.placeholder.evaluator.PlaceholderEvaluator;
 import dev.shiza.honey.placeholder.resolver.Placeholder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import pl.allegro.tech.opel.EvalContext;
 import pl.allegro.tech.opel.EvalContextBuilder;
@@ -27,16 +23,6 @@ class OpelPlaceholderEvaluator implements PlaceholderEvaluator {
     return opelEngine
         .eval(placeholder.expression(), getAsEvalContext(context))
         .thenApply(evaluatedValue -> new EvaluatedPlaceholder(placeholder, evaluatedValue));
-  }
-
-  @Override
-  public CompletableFuture<List<EvaluatedPlaceholder>> evaluate(
-      final PlaceholderContext context, final Set<Placeholder> placeholders) {
-    final List<CompletableFuture<EvaluatedPlaceholder>> evaluatedPlaceholders = new ArrayList<>();
-    for (final Placeholder placeholder : placeholders) {
-      evaluatedPlaceholders.add(evaluate(context, placeholder));
-    }
-    return CompletableFutures.allAsList(evaluatedPlaceholders);
   }
 
   private EvalContext getAsEvalContext(final PlaceholderContext context) {
