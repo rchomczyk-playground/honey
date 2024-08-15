@@ -1,26 +1,22 @@
 package dev.shiza.honey;
 
 import dev.shiza.honey.message.Message;
-import dev.shiza.honey.opel.OpelPlaceholderEvaluatorFactory;
+import dev.shiza.honey.message.MessageCompiler;
+import dev.shiza.honey.placeholder.evaluator.PlaceholderEvaluator;
 import dev.shiza.honey.placeholder.resolver.PlaceholderResolver;
 import dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizer;
 import java.util.concurrent.CompletableFuture;
-import net.kyori.adventure.text.Component;
-import pl.allegro.tech.opel.OpelEngine;
-import pl.allegro.tech.opel.OpelEngineBuilder;
 
-public interface Honey {
+public interface Honey<T> {
 
-  static Honey create(final OpelEngine opelEngine) {
-    return new HoneyImpl(
-        PlaceholderResolver.create(),
-        PlaceholderSanitizer.create(),
-        OpelPlaceholderEvaluatorFactory.create(opelEngine));
+  static <T> Honey<T> create(
+      final MessageCompiler<T> messageCompiler,
+      final PlaceholderResolver placeholderResolver,
+      final PlaceholderSanitizer placeholderSanitizer,
+      final PlaceholderEvaluator placeholderEvaluator) {
+    return new HoneyImpl<>(
+        messageCompiler, placeholderResolver, placeholderSanitizer, placeholderEvaluator);
   }
 
-  static Honey create() {
-    return create(OpelEngineBuilder.create().build());
-  }
-
-  CompletableFuture<Component> compile(final Message message);
+  CompletableFuture<T> compile(final Message message);
 }
