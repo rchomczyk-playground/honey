@@ -1,0 +1,3 @@
+[submodule "honey-addons"]
+	path = honey-addons
+	url = https://github.com/rchomczyk-playground/honey-addons
