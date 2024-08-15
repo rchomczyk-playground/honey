@@ -6,9 +6,6 @@ plugins {
 
 dependencies {
     api(libs.futures)
-    api(libs.lang)
-    api(libs.opel)
-    api(libs.parboiled)
     compileOnly(libs.bundles.adventure)
 }
 

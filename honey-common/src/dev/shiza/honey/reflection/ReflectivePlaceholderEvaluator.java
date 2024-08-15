@@ -68,17 +68,6 @@ class ReflectivePlaceholderEvaluator implements PlaceholderEvaluator {
     return evaluatedValue.thenApply(value -> new EvaluatedPlaceholder(placeholder, value));
   }
 
-  private Object invokeMethodHandle(final Object parent, final MethodHandle handle) {
-    try {
-      return handle.invoke(parent);
-    } catch (final Throwable exception) {
-      throw new ReflectivePlaceholderEvaluationException(
-          "Could not invoke method handle %s for %s parent, because of unexpected exception."
-              .formatted(handle.toString(), parent.getClass().getSimpleName()),
-          exception);
-    }
-  }
-
   private MethodHandle getMethodHandle(final Object parent, final String path) {
     final MethodHandleCompositeKey compositeKey = new MethodHandleCompositeKey(parent, path);
     return methodHandles.computeIfAbsent(compositeKey, key -> getMethodHandleUnsafe(parent, path));
@@ -92,6 +81,17 @@ class ReflectivePlaceholderEvaluator implements PlaceholderEvaluator {
       throw new ReflectivePlaceholderEvaluationException(
           "Could not get method handle for %s parent with %s path, because of unexpected exception."
               .formatted(parent.getClass().getSimpleName(), path),
+          exception);
+    }
+  }
+
+  private Object invokeMethodHandle(final Object parent, final MethodHandle handle) {
+    try {
+      return handle.invoke(parent);
+    } catch (final Throwable exception) {
+      throw new ReflectivePlaceholderEvaluationException(
+          "Could not invoke method handle %s for %s parent, because of unexpected exception."
+              .formatted(handle.toString(), parent.getClass().getSimpleName()),
           exception);
     }
   }
