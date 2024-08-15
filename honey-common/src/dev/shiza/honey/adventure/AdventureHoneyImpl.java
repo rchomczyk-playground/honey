@@ -9,7 +9,7 @@ import net.kyori.adventure.text.Component;
 
 class AdventureHoneyImpl extends HoneyImpl<Component> implements AdventureHoney {
 
-  protected AdventureHoneyImpl(
+  AdventureHoneyImpl(
       final MessageCompiler<Component> messageCompiler,
       final PlaceholderResolver placeholderResolver,
       final PlaceholderSanitizer placeholderSanitizer,

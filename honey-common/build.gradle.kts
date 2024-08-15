@@ -5,11 +5,11 @@ plugins {
 }
 
 dependencies {
-    api(libs.opel)
-    api(libs.lang)
     api(libs.futures)
+    api(libs.lang)
+    api(libs.opel)
     api(libs.parboiled)
-    api(libs.bundles.adventure)
+    compileOnly(libs.bundles.adventure)
 }
 
 honeyPublish {
