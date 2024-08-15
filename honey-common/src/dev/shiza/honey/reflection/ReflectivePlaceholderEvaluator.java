@@ -39,6 +39,9 @@ class ReflectivePlaceholderEvaluator implements PlaceholderEvaluator {
       if (matcher.start() == 0) {
         currentVariableName = path;
         current = context.getValue(path);
+        if (matcher.hitEnd()) {
+          return asEvaluatedPlaceholder(placeholder, current);
+        }
         continue;
       }
 
@@ -51,13 +54,18 @@ class ReflectivePlaceholderEvaluator implements PlaceholderEvaluator {
       final CompletableFuture<?> evaluatedValue =
           current.thenApply(parent -> invokeMethodHandle(parent, getMethodHandle(parent, path)));
       if (matcher.hitEnd()) {
-        return evaluatedValue.thenApply(value -> new EvaluatedPlaceholder(placeholder, value));
+        return asEvaluatedPlaceholder(placeholder, evaluatedValue);
       }
 
       current = evaluatedValue;
     }
 
     return completedFuture(null);
+  }
+
+  private CompletableFuture<EvaluatedPlaceholder> asEvaluatedPlaceholder(
+      final Placeholder placeholder, final CompletableFuture<?> evaluatedValue) {
+    return evaluatedValue.thenApply(value -> new EvaluatedPlaceholder(placeholder, value));
   }
 
   private Object invokeMethodHandle(final Object parent, final MethodHandle handle) {
