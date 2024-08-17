@@ -1,5 +1,8 @@
 package dev.shiza.honey;
 
+import static java.util.Collections.emptyList;
+import static java.util.concurrent.CompletableFuture.completedFuture;
+
 import dev.shiza.honey.message.Message;
 import dev.shiza.honey.message.MessageCompiler;
 import dev.shiza.honey.placeholder.evaluator.PlaceholderEvaluator;
@@ -32,6 +35,10 @@ public class HoneyImpl<T> implements Honey<T> {
   @Override
   public CompletableFuture<T> compile(final Message message) {
     final Set<Placeholder> placeholders = placeholderResolver.resolve(message.content());
+    if (placeholders.isEmpty()) {
+      return completedFuture(compile(message, emptyList()));
+    }
+
     return placeholderEvaluator
         .evaluate(message.context(), placeholders)
         .thenApply(placeholderSanitizer::getSanitizedPlaceholders)
