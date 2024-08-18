@@ -1,6 +1,7 @@
 plugins {
     `honey-java`
     `honey-publish`
+    `honey-unit-test`
     `honey-repositories`
 }
 
