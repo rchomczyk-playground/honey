@@ -17,12 +17,15 @@ final class ReflectivePlaceholderEvaluatorTestUtils {
   static final String SURNAME = "Doe";
 
   static final User USER = new User(NAME, SURNAME);
+  static final Account ACCOUNT = new Account(1, USER);
 
   static final PlaceholderEvaluator EVALUATOR = new ReflectivePlaceholderEvaluator();
-  static final PlaceholderContext CONTEXT =
+  static final PlaceholderContext SYNC_CONTEXT =
+      PlaceholderContext.create().withValue("account", ACCOUNT).withValue("user", USER);
+  static final PlaceholderContext ASYNC_CONTEXT =
       PlaceholderContext.create()
-          .withCompletedValue("account", new Account(1, USER))
-          .withCompletedValue("user", USER);
+          .withPromisedValue("account", ACCOUNT)
+          .withPromisedValue("user", USER);
 
   static Placeholder placeholder(final String expression) {
     return new Placeholder("{{" + expression + "}}", expression);

@@ -8,37 +8,57 @@ import java.util.concurrent.CompletableFuture;
 
 public class PlaceholderContext {
 
-  private final Map<String, CompletableFuture<?>> values;
+  private final Map<String, Object> values;
+  private final Map<String, CompletableFuture<?>> promisedValues;
 
   PlaceholderContext() {
     this.values = new HashMap<>();
+    this.promisedValues = new HashMap<>();
   }
 
   public static PlaceholderContext create() {
     return new PlaceholderContext();
   }
 
-  public PlaceholderContext withValue(
-      final String valueName, final CompletableFuture<Object> value) {
+  public PlaceholderContext withValue(final String valueName, final Object value) {
     values.put(valueName, value);
     return this;
   }
 
-  public PlaceholderContext withValues(final Map<String, CompletableFuture<?>> values) {
+  public PlaceholderContext withValues(final Map<String, Object> values) {
     this.values.putAll(values);
     return this;
   }
 
-  public PlaceholderContext withCompletedValue(final String valueName, final Object value) {
-    values.put(valueName, completedFuture(value));
-    return this;
-  }
-
-  public CompletableFuture<?> getValue(final String valueName) {
+  public Object getValue(final String valueName) {
     return values.get(valueName);
   }
 
-  public Map<String, CompletableFuture<?>> getValues() {
+  public PlaceholderContext withPromisedValue(final String valueName, final Object value) {
+    promisedValues.put(valueName, completedFuture(value));
+    return this;
+  }
+
+  public PlaceholderContext withPromisedValue(
+      final String valueName, final CompletableFuture<Object> value) {
+    promisedValues.put(valueName, value);
+    return this;
+  }
+
+  public PlaceholderContext withPromisedValues(final Map<String, CompletableFuture<?>> values) {
+    promisedValues.putAll(values);
+    return this;
+  }
+
+  public CompletableFuture<?> getPromisedValue(final String valueName) {
+    return promisedValues.get(valueName);
+  }
+
+  public Map<String, Object> getValues() {
     return values;
+  }
+
+  public Map<String, CompletableFuture<?>> getPromisedValues() {
+    return promisedValues;
   }
 }

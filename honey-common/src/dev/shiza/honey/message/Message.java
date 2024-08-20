@@ -10,12 +10,17 @@ public record Message(String content, PlaceholderContext context) {
   }
 
   public Message variable(final String name, final Object value) {
-    context.withCompletedValue(name, value);
+    context.withValue(name, value);
     return this;
   }
 
-  public Message variable(final String name, final CompletableFuture<Object> value) {
-    context.withValue(name, value);
+  public Message promisedVariable(final String name, final Object value) {
+    context.withPromisedValue(name, value);
+    return this;
+  }
+
+  public Message promisedVariable(final String name, final CompletableFuture<Object> value) {
+    context.withPromisedValue(name, value);
     return this;
   }
 }

@@ -1,23 +1,27 @@
 package dev.shiza.honey.placeholder.evaluator;
 
-import com.spotify.futures.CompletableFutures;
 import dev.shiza.honey.placeholder.resolver.Placeholder;
+import dev.shiza.honey.placeholder.visitor.PlaceholderVisitor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 public interface PlaceholderEvaluator {
 
-  CompletableFuture<EvaluatedPlaceholder> evaluate(
-      final PlaceholderContext context, final Placeholder placeholder);
+  EvaluatedPlaceholder evaluate(
+      final PlaceholderContext context,
+      final PlaceholderVisitor<?> visitor,
+      final Placeholder placeholder);
 
-  default CompletableFuture<List<EvaluatedPlaceholder>> evaluate(
-      final PlaceholderContext context, final Set<Placeholder> placeholders) {
-    final List<CompletableFuture<EvaluatedPlaceholder>> evaluatedPlaceholders = new ArrayList<>();
+  default List<EvaluatedPlaceholder> evaluate(
+      final PlaceholderContext context,
+      final Supplier<PlaceholderVisitor<?>> visitor,
+      final Set<Placeholder> placeholders) {
+    final List<EvaluatedPlaceholder> evaluatedPlaceholders = new ArrayList<>();
     for (final Placeholder placeholder : placeholders) {
-      evaluatedPlaceholders.add(evaluate(context, placeholder));
+      evaluatedPlaceholders.add(evaluate(context, visitor.get(), placeholder));
     }
-    return CompletableFutures.allAsList(evaluatedPlaceholders);
+    return evaluatedPlaceholders;
   }
 }

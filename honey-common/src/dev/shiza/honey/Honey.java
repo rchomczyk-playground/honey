@@ -18,5 +18,7 @@ public interface Honey<T> {
         messageCompiler, placeholderResolver, placeholderSanitizer, placeholderEvaluator);
   }
 
-  CompletableFuture<T> compile(final Message message);
+  T compile(final Message message);
+
+  CompletableFuture<T> compileAsync(final Message message);
 }

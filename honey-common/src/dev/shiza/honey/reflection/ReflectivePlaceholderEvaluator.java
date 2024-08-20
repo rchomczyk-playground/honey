@@ -1,17 +1,15 @@
 package dev.shiza.honey.reflection;
 
-import static java.util.concurrent.CompletableFuture.completedFuture;
-
 import dev.shiza.honey.placeholder.evaluator.EvaluatedPlaceholder;
 import dev.shiza.honey.placeholder.evaluator.PlaceholderContext;
 import dev.shiza.honey.placeholder.evaluator.PlaceholderEvaluator;
 import dev.shiza.honey.placeholder.resolver.Placeholder;
+import dev.shiza.honey.placeholder.visitor.PlaceholderVisitor;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,46 +24,30 @@ class ReflectivePlaceholderEvaluator implements PlaceholderEvaluator {
   }
 
   @Override
-  public CompletableFuture<EvaluatedPlaceholder> evaluate(
-      final PlaceholderContext context, final Placeholder placeholder) {
+  public EvaluatedPlaceholder evaluate(
+      final PlaceholderContext context,
+      final PlaceholderVisitor<?> visitor,
+      final Placeholder placeholder) {
     final String expression = placeholder.expression();
-
-    String currentVariableName = null;
-    CompletableFuture<?> current = null;
 
     final Matcher matcher = PATH_PATTERN.matcher(expression);
     while (matcher.find()) {
       final String path = matcher.group();
       if (matcher.start() == 0) {
-        currentVariableName = path;
-        current = context.getValue(path);
+        visitor.start(placeholder, context, path);
         if (matcher.hitEnd()) {
-          return asEvaluatedPlaceholder(placeholder, current);
+          return new EvaluatedPlaceholder(placeholder, visitor.complete());
         }
         continue;
       }
 
-      if (current == null) {
-        throw new ReflectivePlaceholderEvaluationException(
-            "Could not evaluate placeholder with key %s, because of unknown variable named %s"
-                .formatted(placeholder.key(), currentVariableName));
-      }
-
-      final CompletableFuture<?> evaluatedValue =
-          current.thenApply(parent -> invokeMethodHandle(parent, getMethodHandle(parent, path)));
+      visitor.visit(parent -> invokeMethodHandle(parent, getMethodHandle(parent, path)));
       if (matcher.hitEnd()) {
-        return asEvaluatedPlaceholder(placeholder, evaluatedValue);
+        return new EvaluatedPlaceholder(placeholder, visitor.complete());
       }
-
-      current = evaluatedValue;
     }
 
-    return completedFuture(null);
-  }
-
-  private CompletableFuture<EvaluatedPlaceholder> asEvaluatedPlaceholder(
-      final Placeholder placeholder, final CompletableFuture<?> evaluatedValue) {
-    return evaluatedValue.thenApply(value -> new EvaluatedPlaceholder(placeholder, value));
+    return null;
   }
 
   private MethodHandle getMethodHandle(final Object parent, final String path) {
