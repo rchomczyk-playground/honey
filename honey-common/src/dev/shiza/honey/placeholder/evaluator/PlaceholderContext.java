@@ -61,4 +61,13 @@ public class PlaceholderContext {
   public Map<String, CompletableFuture<?>> getPromisedValues() {
     return promisedValues;
   }
+
+  public PlaceholderContext merge(final PlaceholderContext context) {
+    final PlaceholderContext newContext = new PlaceholderContext();
+    newContext.withValues(getValues());
+    newContext.withValues(context.getValues());
+    newContext.withPromisedValues(getPromisedValues());
+    newContext.withPromisedValues(context.getPromisedValues());
+    return newContext;
+  }
 }
