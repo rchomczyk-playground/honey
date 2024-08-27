@@ -2,6 +2,7 @@ package dev.shiza.honey;
 
 import dev.shiza.honey.message.Message;
 import dev.shiza.honey.message.MessageCompiler;
+import dev.shiza.honey.placeholder.evaluator.PlaceholderContext;
 import dev.shiza.honey.placeholder.evaluator.PlaceholderEvaluator;
 import dev.shiza.honey.placeholder.resolver.PlaceholderResolver;
 import dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizer;
@@ -11,11 +12,16 @@ public interface Honey<T> {
 
   static <T> Honey<T> create(
       final MessageCompiler<T> messageCompiler,
+      final PlaceholderContext globalContext,
       final PlaceholderResolver placeholderResolver,
       final PlaceholderSanitizer placeholderSanitizer,
       final PlaceholderEvaluator placeholderEvaluator) {
     return new HoneyImpl<>(
-        messageCompiler, placeholderResolver, placeholderSanitizer, placeholderEvaluator);
+        messageCompiler,
+        globalContext,
+        placeholderResolver,
+        placeholderSanitizer,
+        placeholderEvaluator);
   }
 
   T compile(final Message message);

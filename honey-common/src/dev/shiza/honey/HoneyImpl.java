@@ -7,6 +7,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 import dev.shiza.honey.message.Message;
 import dev.shiza.honey.message.MessageCompiler;
 import dev.shiza.honey.placeholder.evaluator.EvaluatedPlaceholder;
+import dev.shiza.honey.placeholder.evaluator.PlaceholderContext;
 import dev.shiza.honey.placeholder.evaluator.PlaceholderEvaluator;
 import dev.shiza.honey.placeholder.resolver.Placeholder;
 import dev.shiza.honey.placeholder.resolver.PlaceholderResolver;
@@ -21,16 +22,19 @@ import java.util.concurrent.CompletableFuture;
 public class HoneyImpl<T> implements Honey<T> {
 
   private final MessageCompiler<T> messageCompiler;
+  private final PlaceholderContext globalContext;
   private final PlaceholderResolver placeholderResolver;
   private final PlaceholderSanitizer placeholderSanitizer;
   private final PlaceholderEvaluator placeholderEvaluator;
 
   protected HoneyImpl(
       final MessageCompiler<T> messageCompiler,
+      final PlaceholderContext globalContext,
       final PlaceholderResolver placeholderResolver,
       final PlaceholderSanitizer placeholderSanitizer,
       final PlaceholderEvaluator placeholderEvaluator) {
     this.messageCompiler = messageCompiler;
+    this.globalContext = globalContext;
     this.placeholderResolver = placeholderResolver;
     this.placeholderSanitizer = placeholderSanitizer;
     this.placeholderEvaluator = placeholderEvaluator;
@@ -43,9 +47,9 @@ public class HoneyImpl<T> implements Honey<T> {
       return compile(message, emptyList());
     }
 
+    final PlaceholderContext mergedContext = message.context().merge(globalContext);
     final List<EvaluatedPlaceholder> evaluatedPlaceholders =
-        placeholderEvaluator.evaluate(
-            message.context(), PlaceholderVisitorImpl::create, placeholders);
+        placeholderEvaluator.evaluate(mergedContext, PlaceholderVisitorImpl::create, placeholders);
     final List<SanitizedPlaceholder> sanitizedPlaceholders =
         placeholderSanitizer.getSanitizedPlaceholders(evaluatedPlaceholders);
     return compile(message, sanitizedPlaceholders);
@@ -58,9 +62,10 @@ public class HoneyImpl<T> implements Honey<T> {
       return completedFuture(compile(message, emptyList()));
     }
 
+    final PlaceholderContext mergedContext = message.context().merge(globalContext);
     final List<EvaluatedPlaceholder> evaluatedPlaceholders =
         placeholderEvaluator.evaluate(
-            message.context(), PromisingPlaceholderVisitor::create, placeholders);
+            mergedContext, PromisingPlaceholderVisitor::create, placeholders);
     return unwrapPromisedValues(evaluatedPlaceholders)
         .thenApply(placeholderSanitizer::getSanitizedPlaceholders)
         .thenApply(sanitizedPlaceholders -> compile(message, sanitizedPlaceholders));
