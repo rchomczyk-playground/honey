@@ -1,6 +1,7 @@
 package dev.shiza.honey.adventure;
 
 import static net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.component;
+import static net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.parsed;
 import static net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unparsed;
 
 import dev.shiza.honey.message.MessageCompiler;
@@ -39,6 +40,10 @@ class AdventureMessageCompiler implements MessageCompiler<Component> {
       final @Subst("default") String key, final Object evaluatedValue) {
     if (evaluatedValue instanceof Component component) {
       return component(key, component);
+    }
+
+    if (evaluatedValue instanceof ParsableValue parsableValue) {
+      return parsed(key, parsableValue.value());
     }
 
     return unparsed(key, evaluatedValue.toString());
