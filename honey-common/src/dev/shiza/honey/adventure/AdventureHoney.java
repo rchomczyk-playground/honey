@@ -8,7 +8,10 @@ import dev.shiza.honey.placeholder.evaluator.PlaceholderContext;
 import dev.shiza.honey.placeholder.evaluator.PlaceholderEvaluator;
 import dev.shiza.honey.placeholder.resolver.PlaceholderResolver;
 import dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizer;
+import dev.shiza.honey.processor.ProcessorRegistry;
 import dev.shiza.honey.reflection.ReflectivePlaceholderEvaluatorFactory;
+import java.util.Map;
+import java.util.function.Consumer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
@@ -23,26 +26,35 @@ public interface AdventureHoney extends Honey<Component> {
   }
 
   static AdventureHoney createReflective(
-      final MiniMessage miniMessage, final PlaceholderContext globalContext) {
+      final MiniMessage miniMessage, final PlaceholderContext placeholderContext) {
     return create(
         AdventureMessageCompilerFactory.create(miniMessage),
-        globalContext,
+        placeholderContext,
         PlaceholderResolver.create(),
         PlaceholderSanitizer.create(),
-        ReflectivePlaceholderEvaluatorFactory.create());
+        ReflectivePlaceholderEvaluatorFactory.create(),
+        ProcessorRegistry.create());
   }
 
   private static AdventureHoney create(
       final MessageCompiler<Component> messageCompiler,
-      final PlaceholderContext globalContext,
+      final PlaceholderContext placeholderContext,
       final PlaceholderResolver placeholderResolver,
       final PlaceholderSanitizer placeholderSanitizer,
-      final PlaceholderEvaluator placeholderEvaluator) {
+      final PlaceholderEvaluator placeholderEvaluator,
+      final ProcessorRegistry processorRegistry) {
     return new AdventureHoneyImpl(
         messageCompiler,
-        globalContext,
+        placeholderContext,
         placeholderResolver,
         placeholderSanitizer,
-        placeholderEvaluator);
+        placeholderEvaluator,
+        processorRegistry);
   }
+
+  AdventureHoney variable(final String key, final Object value);
+
+  AdventureHoney variables(final Map<String, Object> variables);
+
+  AdventureHoney processors(final Consumer<ProcessorRegistry> registryConsumer);
 }

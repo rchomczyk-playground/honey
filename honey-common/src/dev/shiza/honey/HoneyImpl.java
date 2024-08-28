@@ -15,29 +15,53 @@ import dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizer;
 import dev.shiza.honey.placeholder.sanitizer.SanitizedPlaceholder;
 import dev.shiza.honey.placeholder.visitor.PlaceholderVisitorImpl;
 import dev.shiza.honey.placeholder.visitor.PromisingPlaceholderVisitor;
+import dev.shiza.honey.processor.ProcessorRegistry;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 public class HoneyImpl<T> implements Honey<T> {
 
   private final MessageCompiler<T> messageCompiler;
-  private final PlaceholderContext globalContext;
+  private final PlaceholderContext placeholderContext;
   private final PlaceholderResolver placeholderResolver;
   private final PlaceholderSanitizer placeholderSanitizer;
   private final PlaceholderEvaluator placeholderEvaluator;
+  private final ProcessorRegistry processorRegistry;
 
   protected HoneyImpl(
       final MessageCompiler<T> messageCompiler,
-      final PlaceholderContext globalContext,
+      final PlaceholderContext placeholderContext,
       final PlaceholderResolver placeholderResolver,
       final PlaceholderSanitizer placeholderSanitizer,
-      final PlaceholderEvaluator placeholderEvaluator) {
+      final PlaceholderEvaluator placeholderEvaluator,
+      final ProcessorRegistry processorRegistry) {
     this.messageCompiler = messageCompiler;
-    this.globalContext = globalContext;
+    this.placeholderContext = placeholderContext;
     this.placeholderResolver = placeholderResolver;
     this.placeholderSanitizer = placeholderSanitizer;
     this.placeholderEvaluator = placeholderEvaluator;
+    this.processorRegistry = processorRegistry;
+  }
+
+  @Override
+  public Honey<T> variable(final String key, final Object value) {
+    placeholderContext.withValue(key, value);
+    return this;
+  }
+
+  @Override
+  public Honey<T> variables(final Map<String, Object> variables) {
+    placeholderContext.withValues(variables);
+    return this;
+  }
+
+  @Override
+  public Honey<T> processors(final Consumer<ProcessorRegistry> registryConsumer) {
+    registryConsumer.accept(processorRegistry);
+    return this;
   }
 
   @Override
@@ -47,7 +71,7 @@ public class HoneyImpl<T> implements Honey<T> {
       return compile(message, emptyList());
     }
 
-    final PlaceholderContext mergedContext = message.context().merge(globalContext);
+    final PlaceholderContext mergedContext = message.context().merge(placeholderContext);
     final List<EvaluatedPlaceholder> evaluatedPlaceholders =
         placeholderEvaluator.evaluate(mergedContext, PlaceholderVisitorImpl::create, placeholders);
     final List<SanitizedPlaceholder> sanitizedPlaceholders =
@@ -62,7 +86,7 @@ public class HoneyImpl<T> implements Honey<T> {
       return completedFuture(compile(message, emptyList()));
     }
 
-    final PlaceholderContext mergedContext = message.context().merge(globalContext);
+    final PlaceholderContext mergedContext = message.context().merge(placeholderContext);
     final List<EvaluatedPlaceholder> evaluatedPlaceholders =
         placeholderEvaluator.evaluate(
             mergedContext, PromisingPlaceholderVisitor::create, placeholders);
@@ -72,8 +96,9 @@ public class HoneyImpl<T> implements Honey<T> {
   }
 
   private T compile(final Message message, final List<SanitizedPlaceholder> placeholders) {
+    final String processedContent = processorRegistry.preprocess(message.content());
     final String sanitizedContent =
-        placeholderSanitizer.getSanitizedContent(message.content(), placeholders);
+        placeholderSanitizer.getSanitizedContent(processedContent, placeholders);
     return messageCompiler.compile(sanitizedContent, placeholders);
   }
 
