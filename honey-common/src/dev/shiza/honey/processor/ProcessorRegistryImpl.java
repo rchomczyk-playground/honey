@@ -20,7 +20,7 @@ class ProcessorRegistryImpl implements ProcessorRegistry {
   public String preprocess(final String content) {
     String preprocessedContent = content;
     for (final Processor processor : preprocessors) {
-      preprocessedContent = processor.process(content);
+      preprocessedContent = processor.process(preprocessedContent);
     }
     return preprocessedContent;
   }
