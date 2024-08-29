@@ -1,15 +1,15 @@
 package dev.shiza.honey.processor;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public interface ProcessorRegistry {
 
   static ProcessorRegistry create() {
-    return create(new HashSet<>());
+    return create(new ArrayList<>());
   }
 
-  static ProcessorRegistry create(final Set<Processor> preprocessors) {
+  static ProcessorRegistry create(final List<Processor> preprocessors) {
     return new ProcessorRegistryImpl(preprocessors);
   }
 

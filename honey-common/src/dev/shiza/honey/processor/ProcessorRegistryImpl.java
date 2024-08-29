@@ -1,12 +1,12 @@
 package dev.shiza.honey.processor;
 
-import java.util.Set;
+import java.util.List;
 
 class ProcessorRegistryImpl implements ProcessorRegistry {
 
-  private final Set<Processor> preprocessors;
+  private final List<Processor> preprocessors;
 
-  ProcessorRegistryImpl(final Set<Processor> preprocessors) {
+  ProcessorRegistryImpl(final List<Processor> preprocessors) {
     this.preprocessors = preprocessors;
   }
 
