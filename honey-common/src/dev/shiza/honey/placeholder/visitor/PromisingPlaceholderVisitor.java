@@ -2,11 +2,11 @@ package dev.shiza.honey.placeholder.visitor;
 
 import dev.shiza.honey.placeholder.evaluator.PlaceholderContext;
 import dev.shiza.honey.placeholder.resolver.Placeholder;
-import dev.shiza.honey.reflection.ReflectivePlaceholderEvaluationException;
+import dev.shiza.honey.placeholder.evaluator.reflection.ReflectivePlaceholderEvaluationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.UnaryOperator;
 
-public class PromisingPlaceholderVisitor implements PlaceholderVisitor<CompletableFuture<?>> {
+public final class PromisingPlaceholderVisitor implements PlaceholderVisitor<CompletableFuture<?>> {
 
   private CompletableFuture<?> current;
 

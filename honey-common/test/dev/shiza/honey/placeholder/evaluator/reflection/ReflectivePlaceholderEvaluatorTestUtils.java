@@ -1,12 +1,12 @@
-package dev.shiza.honey.reflection;
+package dev.shiza.honey.placeholder.evaluator.reflection;
 
 import static java.time.Duration.ofSeconds;
 
 import dev.shiza.honey.placeholder.evaluator.PlaceholderContext;
 import dev.shiza.honey.placeholder.evaluator.PlaceholderEvaluator;
 import dev.shiza.honey.placeholder.resolver.Placeholder;
-import dev.shiza.honey.reflection.ReflectivePlaceholderEvaluatorTest.Account;
-import dev.shiza.honey.reflection.ReflectivePlaceholderEvaluatorTest.User;
+import dev.shiza.honey.placeholder.evaluator.reflection.ReflectivePlaceholderEvaluatorTest.Account;
+import dev.shiza.honey.placeholder.evaluator.reflection.ReflectivePlaceholderEvaluatorTest.User;
 import java.time.Duration;
 
 final class ReflectivePlaceholderEvaluatorTestUtils {

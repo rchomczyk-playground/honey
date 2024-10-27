@@ -1,4 +1,4 @@
-package dev.shiza.honey.reflection;
+package dev.shiza.honey.placeholder.evaluator.reflection;
 
 import dev.shiza.honey.placeholder.evaluator.EvaluatedPlaceholder;
 import dev.shiza.honey.placeholder.evaluator.PlaceholderContext;
@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class ReflectivePlaceholderEvaluator implements PlaceholderEvaluator {
+final class ReflectivePlaceholderEvaluator implements PlaceholderEvaluator {
 
   private static final Pattern PATH_PATTERN = Pattern.compile("([a-zA-Z_]\\w*)");
   private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();

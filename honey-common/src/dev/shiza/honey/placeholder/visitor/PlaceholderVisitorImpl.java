@@ -2,10 +2,10 @@ package dev.shiza.honey.placeholder.visitor;
 
 import dev.shiza.honey.placeholder.evaluator.PlaceholderContext;
 import dev.shiza.honey.placeholder.resolver.Placeholder;
-import dev.shiza.honey.reflection.ReflectivePlaceholderEvaluationException;
+import dev.shiza.honey.placeholder.evaluator.reflection.ReflectivePlaceholderEvaluationException;
 import java.util.function.UnaryOperator;
 
-public class PlaceholderVisitorImpl implements PlaceholderVisitor<Object> {
+public final class PlaceholderVisitorImpl implements PlaceholderVisitor<Object> {
 
   private Object current;
 

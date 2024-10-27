@@ -6,9 +6,12 @@ import dev.shiza.honey.message.MessageCompiler;
 import dev.shiza.honey.placeholder.evaluator.PlaceholderContext;
 import dev.shiza.honey.placeholder.evaluator.PlaceholderEvaluator;
 import dev.shiza.honey.placeholder.resolver.PlaceholderResolver;
+import dev.shiza.honey.placeholder.resolver.PlaceholderResolverFactory;
 import dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizer;
+import dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizerFactory;
 import dev.shiza.honey.processor.ProcessorRegistry;
-import dev.shiza.honey.reflection.ReflectivePlaceholderEvaluatorFactory;
+import dev.shiza.honey.processor.ProcessorRegistryFactory;
+import dev.shiza.honey.placeholder.evaluator.reflection.ReflectivePlaceholderEvaluatorFactory;
 import org.jetbrains.annotations.ApiStatus.Internal;
 
 @Internal
@@ -44,10 +47,10 @@ public abstract class HoneyBaseBuilder<T, R extends Honey<T>> implements HoneyBu
         messageCompiler,
         ImplicitConversion.create(),
         PlaceholderContext.create(),
-        PlaceholderResolver.create(),
-        PlaceholderSanitizer.create(),
+        PlaceholderResolverFactory.create(),
+        PlaceholderSanitizerFactory.create(),
         ReflectivePlaceholderEvaluatorFactory.create(),
-        ProcessorRegistry.create());
+        ProcessorRegistryFactory.create());
   }
 
   @Override

@@ -12,7 +12,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.intellij.lang.annotations.Subst;
 
-class AdventureMessageCompiler implements MessageCompiler<Component> {
+final class AdventureMessageCompiler implements MessageCompiler<Component> {
 
   private final MiniMessage miniMessage;
 

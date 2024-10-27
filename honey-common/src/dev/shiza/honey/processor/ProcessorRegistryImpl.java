@@ -2,7 +2,7 @@ package dev.shiza.honey.processor;
 
 import java.util.List;
 
-class ProcessorRegistryImpl implements ProcessorRegistry {
+final class ProcessorRegistryImpl implements ProcessorRegistry {
 
   private final List<Processor> preprocessors;
 

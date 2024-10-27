@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import net.kyori.adventure.text.Component;
 
-class AdventureHoneyImpl extends HoneyImpl<Component> implements AdventureHoney {
+final class AdventureHoneyImpl extends HoneyImpl<Component> implements AdventureHoney {
 
   AdventureHoneyImpl(
       final MessageCompiler<Component> messageCompiler,

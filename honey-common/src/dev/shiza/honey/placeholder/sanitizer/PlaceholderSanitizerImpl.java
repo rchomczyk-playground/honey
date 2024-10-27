@@ -7,7 +7,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class PlaceholderSanitizerImpl implements PlaceholderSanitizer {
+final class PlaceholderSanitizerImpl implements PlaceholderSanitizer {
 
   private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("\\{\\{([^}]+)}}");
   private static final Pattern METHOD_CALL_PATTERN = Pattern.compile("\\b\\w+(?:\\.\\w+)*");

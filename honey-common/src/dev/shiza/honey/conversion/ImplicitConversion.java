@@ -26,6 +26,9 @@ public final class ImplicitConversion {
 
   public <T> T convert(final Object value) {
     Object currentValue = value;
+    if (currentValue == null) {
+      return null;
+    }
 
     boolean conversionFound;
     do {

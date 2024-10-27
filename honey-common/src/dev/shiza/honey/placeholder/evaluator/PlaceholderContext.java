@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-public class PlaceholderContext {
+public final class PlaceholderContext {
 
   private final Map<String, Object> values;
   private final Map<String, CompletableFuture<?>> promisedValues;

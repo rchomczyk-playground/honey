@@ -5,10 +5,6 @@ import java.util.List;
 
 public interface PlaceholderSanitizer {
 
-  static PlaceholderSanitizer create() {
-    return new PlaceholderSanitizerImpl();
-  }
-
   String getSanitizedContent(final String content, final List<SanitizedPlaceholder> placeholders);
 
   SanitizedPlaceholder getSanitizedPlaceholder(final EvaluatedPlaceholder placeholder);

@@ -1,6 +1,6 @@
-package dev.shiza.honey.reflection;
+package dev.shiza.honey.placeholder.evaluator.reflection;
 
-public class ReflectivePlaceholderEvaluationException extends RuntimeException {
+public final class ReflectivePlaceholderEvaluationException extends RuntimeException {
 
   public ReflectivePlaceholderEvaluationException(final String message) {
     super(message);

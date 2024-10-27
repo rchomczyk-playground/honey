@@ -1,13 +1,13 @@
-package dev.shiza.honey.reflection;
+package dev.shiza.honey.placeholder.evaluator.reflection;
 
-import static dev.shiza.honey.reflection.ReflectivePlaceholderEvaluatorTestUtils.ASYNC_CONTEXT;
-import static dev.shiza.honey.reflection.ReflectivePlaceholderEvaluatorTestUtils.EVALUATOR;
-import static dev.shiza.honey.reflection.ReflectivePlaceholderEvaluatorTestUtils.INVOCATION_TIMEOUT;
-import static dev.shiza.honey.reflection.ReflectivePlaceholderEvaluatorTestUtils.NAME;
-import static dev.shiza.honey.reflection.ReflectivePlaceholderEvaluatorTestUtils.SURNAME;
-import static dev.shiza.honey.reflection.ReflectivePlaceholderEvaluatorTestUtils.SYNC_CONTEXT;
-import static dev.shiza.honey.reflection.ReflectivePlaceholderEvaluatorTestUtils.USER;
-import static dev.shiza.honey.reflection.ReflectivePlaceholderEvaluatorTestUtils.placeholder;
+import static dev.shiza.honey.placeholder.evaluator.reflection.ReflectivePlaceholderEvaluatorTestUtils.ASYNC_CONTEXT;
+import static dev.shiza.honey.placeholder.evaluator.reflection.ReflectivePlaceholderEvaluatorTestUtils.EVALUATOR;
+import static dev.shiza.honey.placeholder.evaluator.reflection.ReflectivePlaceholderEvaluatorTestUtils.INVOCATION_TIMEOUT;
+import static dev.shiza.honey.placeholder.evaluator.reflection.ReflectivePlaceholderEvaluatorTestUtils.NAME;
+import static dev.shiza.honey.placeholder.evaluator.reflection.ReflectivePlaceholderEvaluatorTestUtils.SURNAME;
+import static dev.shiza.honey.placeholder.evaluator.reflection.ReflectivePlaceholderEvaluatorTestUtils.SYNC_CONTEXT;
+import static dev.shiza.honey.placeholder.evaluator.reflection.ReflectivePlaceholderEvaluatorTestUtils.USER;
+import static dev.shiza.honey.placeholder.evaluator.reflection.ReflectivePlaceholderEvaluatorTestUtils.placeholder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
@@ -84,7 +84,7 @@ class ReflectivePlaceholderEvaluatorTest {
         .withThrowableOfType(ExecutionException.class)
         .withCauseInstanceOf(ReflectivePlaceholderEvaluationException.class)
         .withMessageMatching(
-            "dev.shiza.honey.reflection.ReflectivePlaceholderEvaluationException: Could not get method handle for (\\w+) parent with (\\w+) path, because of unexpected exception.");
+            "dev.shiza.honey.placeholder.evaluator.reflection.ReflectivePlaceholderEvaluationException: Could not get method handle for (\\w+) parent with (\\w+) path, because of unexpected exception.");
   }
 
   @Test

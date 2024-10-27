@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class RegexPlaceholderResolver implements PlaceholderResolver {
+final class RegexPlaceholderResolver implements PlaceholderResolver {
 
   private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("\\{\\{([^}]+)}}");
 
