@@ -20,6 +20,10 @@ public final class ImplicitConversion {
     return new ImplicitConversion(units);
   }
 
+  public static ImplicitConversion create(final ImplicitConversionUnit... units) {
+    return create(Set.of(units));
+  }
+
   public <T> T convert(final Object value) {
     Object currentValue = value;
 
