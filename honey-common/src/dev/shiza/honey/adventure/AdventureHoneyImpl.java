@@ -1,6 +1,7 @@
 package dev.shiza.honey.adventure;
 
 import dev.shiza.honey.HoneyImpl;
+import dev.shiza.honey.conversion.ImplicitConversion;
 import dev.shiza.honey.message.MessageCompiler;
 import dev.shiza.honey.placeholder.evaluator.PlaceholderContext;
 import dev.shiza.honey.placeholder.evaluator.PlaceholderEvaluator;
@@ -15,6 +16,7 @@ class AdventureHoneyImpl extends HoneyImpl<Component> implements AdventureHoney 
 
   AdventureHoneyImpl(
       final MessageCompiler<Component> messageCompiler,
+      final ImplicitConversion implicitConversion,
       final PlaceholderContext placeholderContext,
       final PlaceholderResolver placeholderResolver,
       final PlaceholderSanitizer placeholderSanitizer,
@@ -22,6 +24,7 @@ class AdventureHoneyImpl extends HoneyImpl<Component> implements AdventureHoney 
       final ProcessorRegistry processorRegistry) {
     super(
         messageCompiler,
+        implicitConversion,
         placeholderContext,
         placeholderResolver,
         placeholderSanitizer,

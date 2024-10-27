@@ -1,5 +1,6 @@
 package dev.shiza.honey;
 
+import dev.shiza.honey.conversion.ImplicitConversion;
 import dev.shiza.honey.message.Message;
 import dev.shiza.honey.message.MessageCompiler;
 import dev.shiza.honey.placeholder.evaluator.PlaceholderContext;
@@ -15,6 +16,7 @@ public interface Honey<T> {
 
   static <T> Honey<T> create(
       final MessageCompiler<T> messageCompiler,
+      final ImplicitConversion implicitConversion,
       final PlaceholderContext placeholderContext,
       final PlaceholderResolver placeholderResolver,
       final PlaceholderSanitizer placeholderSanitizer,
@@ -22,6 +24,7 @@ public interface Honey<T> {
       final ProcessorRegistry processorRegistry) {
     return new HoneyImpl<>(
         messageCompiler,
+        implicitConversion,
         placeholderContext,
         placeholderResolver,
         placeholderSanitizer,
