@@ -2,11 +2,9 @@ package dev.shiza.honey.adventure.message.dispatcher;
 
 import com.google.common.collect.ImmutableList;
 import com.spotify.futures.CompletableFutures;
-import dev.shiza.honey.message.Message;
 import dev.shiza.honey.message.dispatcher.MessageBaseDispatcher;
 import dev.shiza.honey.message.dispatcher.MessageDispatcher;
 import dev.shiza.honey.message.dispatcher.TitleMessageDispatcher;
-import dev.shiza.honey.message.formatter.MessageFormatter;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -20,41 +18,31 @@ import net.kyori.adventure.title.TitlePart;
 public final class AdventureTitleMessageDispatcher
     implements TitleMessageDispatcher<Audience, Component> {
 
-  private final MessageFormatter<Component> messageFormatter;
   private final MessageDispatcher<Audience, Component> times;
   private final MessageDispatcher<Audience, Component> title;
   private final MessageDispatcher<Audience, Component> subtitle;
   private final Audience recipient;
 
   public AdventureTitleMessageDispatcher(
-      final MessageFormatter<Component> messageFormatter,
       final MessageDispatcher<Audience, Component> times,
       final MessageDispatcher<Audience, Component> title,
       final MessageDispatcher<Audience, Component> subtitle,
       final Audience recipient) {
-    this.messageFormatter = messageFormatter;
     this.times = times;
     this.title = title;
     this.subtitle = subtitle;
     this.recipient = recipient;
   }
 
-  public AdventureTitleMessageDispatcher(final MessageFormatter<Component> messageFormatter) {
+  public AdventureTitleMessageDispatcher() {
     this(
-        messageFormatter,
         new MessageBaseDispatcher<>(
-            messageFormatter,
-            Message.blank(),
             Audience.empty(),
             (audience, component) -> audience.sendTitlePart(TitlePart.TIMES, Title.DEFAULT_TIMES)),
         new MessageBaseDispatcher<>(
-            messageFormatter,
-            Message.blank(),
             Audience.empty(),
             (audience, component) -> audience.sendTitlePart(TitlePart.TITLE, component)),
         new MessageBaseDispatcher<>(
-            messageFormatter,
-            Message.blank(),
             Audience.empty(),
             (audience, component) -> audience.sendTitlePart(TitlePart.SUBTITLE, component)),
         Audience.empty());
@@ -68,31 +56,26 @@ public final class AdventureTitleMessageDispatcher
             Duration.ofSeconds(fadeIn), Duration.ofSeconds(stay), Duration.ofSeconds(fadeOut));
     final MessageDispatcher<Audience, Component> timesDispatcher =
         new MessageBaseDispatcher<>(
-            messageFormatter,
-            Message.blank(),
-            recipient,
-            (audience, component) -> audience.sendTitlePart(TitlePart.TIMES, titleTime));
+            recipient, (audience, component) -> audience.sendTitlePart(TitlePart.TIMES, titleTime));
     return new AdventureTitleMessageDispatcher(
-        messageFormatter, timesDispatcher, title, subtitle, recipient);
+        timesDispatcher.template(Component.empty()), title, subtitle, recipient);
   }
 
   @Override
   public TitleMessageDispatcher<Audience, Component> title(
       final UnaryOperator<MessageDispatcher<Audience, Component>> consumer) {
-    return new AdventureTitleMessageDispatcher(
-        messageFormatter, times, consumer.apply(title), subtitle, recipient);
+    return new AdventureTitleMessageDispatcher(times, consumer.apply(title), subtitle, recipient);
   }
 
   @Override
   public TitleMessageDispatcher<Audience, Component> subtitle(
       final UnaryOperator<MessageDispatcher<Audience, Component>> consumer) {
-    return new AdventureTitleMessageDispatcher(
-        messageFormatter, times, title, consumer.apply(subtitle), recipient);
+    return new AdventureTitleMessageDispatcher(times, title, consumer.apply(subtitle), recipient);
   }
 
   @Override
   public TitleMessageDispatcher<Audience, Component> recipient(final Audience recipient) {
-    return new AdventureTitleMessageDispatcher(messageFormatter, times, title, subtitle, recipient);
+    return new AdventureTitleMessageDispatcher(times, title, subtitle, recipient);
   }
 
   @Override

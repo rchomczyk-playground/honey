@@ -46,26 +46,26 @@ implementation("dev.shiza:honey:2.0.0")
 A showcase of how to use *honey*, can be found in [honey-test-plugin](honey-test-plugin) module.
 
 ```java
-/* for titles::audience */
-dispatcher.createTitle()
+// * sending a message as title with all honey features
+AdventureMessageDispatcher.createTitle()
     .recipient(event.getPlayer())
-    .title(it -> it.template("Hello!"))
-    .subtitle(it -> it.template("It is a pleasure to see you there {{player.getName}}")
+    .title(it -> it.template(formatter, "Hello!"))
+    .subtitle(it -> it.template(formatter, "It is a pleasure to see you there {{player.getName}}")
     .variable("player", event.getPlayer()))
     .times(2, 4, 2)
     .dispatch();
 
-/* for chat::audience */
-dispatcher.createChat()
+// * sending a message as chat message with all honey features
+AdventureMessageDispatcher.createChat()
     .recipient(Bukkit.getServer())
-    .template("{{player.getName}} has joined the server!")
+    .template(formatter, "{{player.getName}} has joined the server!")
     .variable("player", event.getPlayer())
     .dispatch();
 
-/* for actionbar::audience */
-dispatcher.createActionBar()
+// * sending a message as action bar with predefined message without any placeholder support
+AdventureMessageDispatcher.createActionBar()
     .recipient(event.getPlayer())
-    .template("Honey is great, isn't it?")
+    .template(Component.text("Honey is great, isn't it?"))
     .dispatch();
 ```
 
