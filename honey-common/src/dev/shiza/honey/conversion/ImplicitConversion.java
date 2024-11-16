@@ -24,27 +24,28 @@ public final class ImplicitConversion {
     return create(Set.of(units));
   }
 
-  public <T> T convert(final Object value) {
-    Object currentValue = value;
-    if (currentValue == null) {
+  public Object convert(final Object value) {
+    if (value == null) {
       return null;
     }
 
-    boolean conversionFound;
-    do {
-      conversionFound = false;
-      for (final Map.Entry<Class<?>, Function<Object, Object>> entry : conversions.entrySet()) {
-        if (entry.getKey().isAssignableFrom(currentValue.getClass())) {
-          final Object convertedValue = entry.getValue().apply(currentValue);
-          if (convertedValue != null) {
-            currentValue = convertedValue;
-            conversionFound = true;
-            break;
-          }
+    return convertRecursive(value, false);
+  }
+
+  private Object convertRecursive(final Object value, final boolean conversionFound) {
+    if (value == null || conversionFound) {
+      return value;
+    }
+
+    for (final Map.Entry<Class<?>, Function<Object, Object>> entry : conversions.entrySet()) {
+      if (entry.getKey().isAssignableFrom(value.getClass())) {
+        final Object convertedValue = entry.getValue().apply(value);
+        if (convertedValue != null) {
+          return convertRecursive(convertedValue, true);
         }
       }
-    } while (conversionFound);
+    }
 
-    return (T) currentValue;
+    return value;
   }
 }
