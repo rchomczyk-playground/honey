@@ -1,6 +1,9 @@
 package dev.shiza.honey;
 
 import dev.shiza.honey.adventure.message.dispatcher.AdventureMessageDispatcher;
+import dev.shiza.honey.adventure.message.formatter.AdventureMessageFormatter;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -8,36 +11,33 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 final class ExampleListener implements Listener {
 
-  private final AdventureMessageDispatcher dispatcher;
+  private final AdventureMessageFormatter formatter;
 
-  ExampleListener(final AdventureMessageDispatcher dispatcher) {
-    this.dispatcher = dispatcher;
+  ExampleListener(
+      final AdventureMessageFormatter formatter) {
+    this.formatter = formatter;
   }
 
   @EventHandler
   public void onPlayerJoin(final PlayerJoinEvent event) {
-    dispatcher
-        .createTitle()
+    AdventureMessageDispatcher.createTitle()
         .recipient(event.getPlayer())
-        .title(it -> it.template("Hello!"))
+        .title(it -> it.template(formatter, "Hello!"))
         .subtitle(
             it ->
-                it.template("It is a pleasure to see you there {{player.getName}}")
+                it.template(formatter, "It is a pleasure to see you there {{player.getName}}")
                     .variable("player", event.getPlayer()))
         .times(2, 4, 2)
         .dispatch();
 
-    dispatcher
-        .createChat()
+    AdventureMessageDispatcher.createChat()
         .recipient(Bukkit.getServer())
-        .template("{{player.getName}} has joined the server!")
-        .variable("player", event.getPlayer())
+        .template(Component.text("Somebody joined to the server!").color(NamedTextColor.RED))
         .dispatch();
 
-    dispatcher
-        .createActionBar()
+    AdventureMessageDispatcher.createActionBar()
         .recipient(event.getPlayer())
-        .template("Honey is great, isn't it?")
+        .template(formatter, "Honey is great, isn't it?")
         .dispatch();
   }
 }
