@@ -26,12 +26,10 @@ implementation("dev.shiza:honey:2.0.0")
 
 ##### Add repository
 ```xml
-<repositories>
-  <repository>
-    <id>shiza-releases</id>
-    <url>https://repo.shiza.dev/releases</url>
-  </repository>
-</repositories>
+<repository>
+  <id>shiza-releases</id>
+  <url>https://repo.shiza.dev/releases</url>
+</repository>
 ```
 
 ##### Add dependency
