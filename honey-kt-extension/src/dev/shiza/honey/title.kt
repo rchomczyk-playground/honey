@@ -51,23 +51,3 @@ fun Player.createTitle(
         .subtitle { base -> base.apply(subtitleConfig) }
         .times(fadeIn, stay, fadeOut)
 
-
-fun TitleConfigurer.withFormattedTitle(messageFormatter: MessageFormatter): TitleMessageDispatcher<Audience, Message> =
-    this.title { base -> 
-        base.apply { messageFormatter.format(this) }
-    }
-
-fun Audience.createTitle(
-    messageFormatter: MessageFormatter<Component>,
-    titleConfig: MessageConfigurer,
-    subtitleConfig: MessageConfigurer,
-    fadeIn: Int,
-    stay: Int,
-    fadeOut: Int
-): TitleMessageDispatcher<Audience, Message> =
-    createTitle()
-        .recipient(this)
-        .withFormattedTitle(messageFormatter) 
-        .title { base -> base.apply(titleConfig) }
-        .subtitle { base -> base.apply(subtitleConfig) }
-        .times(fadeIn, stay, fadeOut)
