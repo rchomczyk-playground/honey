@@ -1,25 +1,16 @@
-import dev.shiza.honey.dispatcher.AdventureMessageDispatcher
-import dev.shiza.honey.message.Message
+import dev.shiza.honey.TypedMessageDispatcher
+import dev.shiza.honey.message.dispatcher.MessageBaseDispatcher
 import net.kyori.adventure.audience.Audience
-import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
 
-typealias MessageFormatter = MessageFormatter<Component>
-typealias MessageDispatcher = MessageDispatcher<Audience, Component>
-
-
-fun Player.createChat(messageFormatter: MessageFormatter): MessageDispatcher =
+fun Player.createChat(): TypedMessageDispatcher =
     MessageBaseDispatcher(
-        messageFormatter, 
-        Message.blank(),
-        this,  
+        this,
         Audience::sendMessage
     )
 
-fun Player.createActionBar(messageFormatter: MessageFormatter): MessageDispatcher =
+fun Player.createActionBar(): TypedMessageDispatcher =
     MessageBaseDispatcher(
-        messageFormatter,  
-        Message.blank(),
-        this, 
+        this,
         Audience::sendActionBar
     )

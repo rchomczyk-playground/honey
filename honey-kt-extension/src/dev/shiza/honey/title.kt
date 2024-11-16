@@ -1,25 +1,22 @@
-import dev.shiza.honey.dispatcher.TitleMessageDispatcher
-import dev.shiza.honey.dispatcher.MessageDispatcher
-import dev.shiza.honey.message.Message
+import dev.shiza.honey.MessageConfigurer
+import dev.shiza.honey.adventure.message.dispatcher.AdventureMessageDispatcher
+import dev.shiza.honey.message.dispatcher.TitleMessageDispatcher
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
+import org.bukkit.entity.Player
 
-typealias TitleConfigurer = TitleMessageDispatcher<Audience, Message>.() -> Unit
-typealias MessageConfigurer = MessageDispatcher<Audience, Message>.() -> Unit
-
-fun times(fadeIn: Int, stay: Int, fadeOut: Int): Triple<Int, Int, Int> = 
+fun times(fadeIn: Int, stay: Int, fadeOut: Int): Triple<Int, Int, Int> =
     Triple(fadeIn, stay, fadeOut)
 
-
-fun TitleMessageDispatcher.createTitle(
+fun AdventureMessageDispatcher.createTitle(
     recipient: Audience,
     titleConfig: MessageConfigurer,
     subtitleConfig: MessageConfigurer,
     fadeIn: Int,
     stay: Int,
     fadeOut: Int
-): MessageDispatcher<Audience, Message> =
-    createTitle()
+): TitleMessageDispatcher<Audience, Component> =
+    AdventureMessageDispatcher.createTitle()
         .recipient(recipient)
         .title { base -> base.apply(titleConfig) }
         .subtitle { base -> base.apply(subtitleConfig) }
@@ -31,8 +28,8 @@ fun Audience.createTitle(
     fadeIn: Int,
     stay: Int,
     fadeOut: Int
-): TitleMessageDispatcher<Audience, Message> =
-    createTitle()
+): TitleMessageDispatcher<Audience, Component> =
+    AdventureMessageDispatcher.createTitle()
         .recipient(this)
         .title { base -> base.apply(titleConfig) }
         .subtitle { base -> base.apply(subtitleConfig) }
@@ -44,8 +41,8 @@ fun Player.createTitle(
     fadeIn: Int,
     stay: Int,
     fadeOut: Int
-): TitleMessageDispatcher<Audience, Message> =
-    createTitle()
+): TitleMessageDispatcher<Audience, Component> =
+    AdventureMessageDispatcher.createTitle()
         .recipient(this)
         .title { base -> base.apply(titleConfig) }
         .subtitle { base -> base.apply(subtitleConfig) }

@@ -1,38 +1,28 @@
-import dev.shiza.honey.dispatcher.AdventureMessageDispatcher
-import dev.shiza.honey.message.Message
+import dev.shiza.honey.TypedMessageDispatcher
+import dev.shiza.honey.adventure.message.dispatcher.AdventureMessageDispatcher
+import dev.shiza.honey.message.dispatcher.MessageBaseDispatcher
 import net.kyori.adventure.audience.Audience
-import net.kyori.adventure.text.Component
 
-typealias MessageDispatcher = MessageDispatcher<Audience, Component>
-
-fun AdventureMessageDispatcher.createChat(): MessageDispatcher =
+fun AdventureMessageDispatcher.createChat(): TypedMessageDispatcher =
     MessageBaseDispatcher(
-        messageFormatter, 
-        Message.blank(),
         Audience.empty(),
         Audience::sendMessage
     )
 
-fun AdventureMessageDispatcher.createActionBar(): MessageDispatcher =
+fun AdventureMessageDispatcher.createActionBar(): TypedMessageDispatcher =
     MessageBaseDispatcher(
-        messageFormatter,
-        Message.blank(),
         Audience.empty(),
         Audience::sendActionBar
     )
 
-fun Audience.createChat(): MessageDispatcher =
+fun Audience.createChat(): TypedMessageDispatcher =
     MessageBaseDispatcher(
-        messageFormatter, 
-        Message.blank(),
-        this,  
+        this,
         Audience::sendMessage
     )
 
-fun Audience.createActionBar(): MessageDispatcher =
+fun Audience.createActionBar(): TypedMessageDispatcher =
     MessageBaseDispatcher(
-        messageFormatter, 
-        Message.blank(),
-        this, 
+        this,
         Audience::sendActionBar
     )
