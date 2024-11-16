@@ -6,7 +6,7 @@ import static java.util.concurrent.CompletableFuture.completedFuture;
 
 import dev.shiza.honey.conversion.ImplicitConversion;
 import dev.shiza.honey.message.Message;
-import dev.shiza.honey.message.MessageCompiler;
+import dev.shiza.honey.message.compiler.MessageCompiler;
 import dev.shiza.honey.placeholder.evaluator.EvaluatedPlaceholder;
 import dev.shiza.honey.placeholder.evaluator.PlaceholderContext;
 import dev.shiza.honey.placeholder.evaluator.PlaceholderEvaluator;

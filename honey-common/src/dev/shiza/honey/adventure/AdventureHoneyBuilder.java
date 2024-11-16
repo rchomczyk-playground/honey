@@ -1,12 +1,13 @@
 package dev.shiza.honey.adventure;
 
+import dev.shiza.honey.adventure.message.compiler.AdventureMessageCompilerFactory;
 import dev.shiza.honey.builder.HoneyBaseBuilder;
 import dev.shiza.honey.builder.HoneyBuilder;
-import dev.shiza.honey.message.MessageCompiler;
+import dev.shiza.honey.message.compiler.MessageCompiler;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
-final class AdventureHoneyBuilder extends HoneyBaseBuilder<Component, AdventureHoney> {
+public final class AdventureHoneyBuilder extends HoneyBaseBuilder<Component, AdventureHoney> {
 
   private AdventureHoneyBuilder(final MessageCompiler<Component> messageCompiler) {
     super(messageCompiler);

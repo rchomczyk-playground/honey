@@ -1,10 +1,11 @@
-package dev.shiza.honey.adventure;
+package dev.shiza.honey.adventure.message.compiler;
 
 import static net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.component;
 import static net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.parsed;
 import static net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unparsed;
 
-import dev.shiza.honey.message.MessageCompiler;
+import dev.shiza.honey.adventure.placeholder.ParsableValue;
+import dev.shiza.honey.message.compiler.MessageCompiler;
 import dev.shiza.honey.placeholder.sanitizer.SanitizedPlaceholder;
 import java.util.List;
 import net.kyori.adventure.text.Component;
