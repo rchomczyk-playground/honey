@@ -1,5 +1,6 @@
 package dev.shiza.honey.processor;
 
+import com.google.common.collect.ImmutableList;
 import java.util.List;
 
 final class ProcessorRegistryImpl implements ProcessorRegistry {
@@ -12,16 +13,16 @@ final class ProcessorRegistryImpl implements ProcessorRegistry {
 
   @Override
   public ProcessorRegistry preprocessor(final Processor processor) {
-    preprocessors.add(processor);
-    return this;
+    return new ProcessorRegistryImpl(
+        ImmutableList.<Processor>builder().addAll(preprocessors).add(processor).build());
   }
 
   @Override
   public String preprocess(final String content) {
-    String preprocessedContent = content;
-    for (final Processor processor : preprocessors) {
-      preprocessedContent = processor.process(preprocessedContent);
-    }
-    return preprocessedContent;
+    return preprocessors.stream()
+        .reduce(
+            content,
+            (processedContent, processor) -> processor.process(processedContent),
+            (a, b) -> b);
   }
 }

@@ -1,6 +1,6 @@
 package dev.shiza.honey.processor;
 
-import java.util.ArrayList;
+import com.google.common.collect.ImmutableList;
 import java.util.List;
 
 public final class ProcessorRegistryFactory {
@@ -12,6 +12,6 @@ public final class ProcessorRegistryFactory {
   }
 
   public static ProcessorRegistry create() {
-    return create(new ArrayList<>());
+    return create(ImmutableList.of());
   }
 }
