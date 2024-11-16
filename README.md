@@ -46,6 +46,8 @@ implementation("dev.shiza:honey:2.0.0")
 A showcase of how to use *honey*, can be found in [honey-test-plugin](honey-test-plugin) module.
 
 ```java
+## With Formatter placeholder:
+
 /* for titles::audience */
 dispatcher.createTitle()
     .recipient(event.getPlayer())
@@ -67,6 +69,20 @@ dispatcher.createActionBar()
     .recipient(event.getPlayer())
     .template("Honey is great, isn't it?")
     .dispatch();
+```
+
+## Without formatter, plain template:
+```java
+    AdventureMessageDispatcher.createChat()
+        .recipient(Bukkit.getServer())
+        .template(Component.text("Somebody joined to the server!").color(NamedTextColor.RED))
+        .dispatch();
+
+    AdventureMessageDispatcher.createActionBar()
+        .recipient(event.getPlayer())
+        .template(formatter, "Honey is great, isn't it?")
+        .dispatch();
+  }
 ```
 
 ![test-plugin showcase](assets/image.png)
