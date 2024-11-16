@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "dev.shiza"
-version = "1.2.2-SNAPSHOT"
+version = "1.3.0"
 
 java {
     withSourcesJar()
