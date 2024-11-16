@@ -17,5 +17,11 @@ maven("https://repo.shiza.dev/releases")
 ##### Add dependency
 
 ```kotlin
-implementation("dev.shiza:honey:1.3.0")
+implementation("dev.shiza:honey:2.0.0")
 ```
+
+### Use case
+
+A showcase of how to use *honey*, can be found in [honey-test-plugin](honey-test-plugin) module.
+
+![test-plugin showcase](assets/image.png)
