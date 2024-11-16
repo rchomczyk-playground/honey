@@ -8,6 +8,8 @@ A message library, which focuses on simplicity and flexibility.
 
 ### Get started
 
+#### Gradle (kts)
+
 ##### Add repository
 
 ```kotlin
@@ -18,6 +20,27 @@ maven("https://repo.shiza.dev/releases")
 
 ```kotlin
 implementation("dev.shiza:honey:2.0.0")
+```
+
+#### Maven
+
+##### Add repository
+```xml
+<repositories>
+  <repository>
+    <id>shiza-releases</id>
+    <url>https://repo.shiza.dev/releases</url>
+  </repository>
+</repositories>
+```
+
+##### Add dependency
+```xml
+<dependency>
+  <groupId>dev.shiza</groupId>
+  <artifactId>honey</artifactId>
+  <version>2.0.0</version>
+</dependency>
 ```
 
 ### Use case
