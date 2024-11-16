@@ -4,11 +4,9 @@ import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import org.bukkit.entity.Player
 
-typealias MessageFormatter = MessageFormatter<Component>
 typealias MessageDispatcher = MessageDispatcher<Audience, Component>
 
-
-fun Player.createChat(messageFormatter: MessageFormatter): MessageDispatcher =
+fun Player.createChat(): MessageDispatcher =
     MessageBaseDispatcher(
         messageFormatter, 
         Message.blank(),
@@ -16,7 +14,7 @@ fun Player.createChat(messageFormatter: MessageFormatter): MessageDispatcher =
         Audience::sendMessage
     )
 
-fun Player.createActionBar(messageFormatter: MessageFormatter): MessageDispatcher =
+fun Player.createActionBar(): MessageDispatcher =
     MessageBaseDispatcher(
         messageFormatter,  
         Message.blank(),
