@@ -1,8 +1,10 @@
 [versions]
+guava = "33.3.1-jre"
 futures = "0.3.6"
 adventure = "4.17.0"
 
 [libraries]
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
 futures = { module = "com.spotify:completable-futures", version.ref = "futures" }
 adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
 adventure-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
