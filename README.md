@@ -23,11 +23,11 @@ maven { url 'https://repo.shiza.dev/releases' }
 ##### Add dependency
 
 ```kotlin
-implementation("dev.shiza:honey:2.0.0")
+implementation("dev.shiza:honey:2.0.1")
 ```
 
 ```groovy
-implementation 'dev.shiza:honey:2.0.0'
+implementation 'dev.shiza:honey:2.0.1'
 ```
 
 #### Maven
@@ -45,53 +45,60 @@ implementation 'dev.shiza:honey:2.0.0'
 <dependency>
   <groupId>dev.shiza</groupId>
   <artifactId>honey</artifactId>
-  <version>2.0.0</version>
+  <version>2.0.1</version>
 </dependency>
 ```
 
 ![test-plugin showcase](assets/image.png)
 
-### Use case Java
+### Use case (honey)
 
 A showcase of how to use *honey*, can be found in [honey-test-plugin](honey-test-plugin) module.
 
-## With Formatter placeholder:
+#### With use of formatter
+
+*MessageFormatter* provides all functionality that honey offers, it comes with reflective placeholder
+evaluation and sanitization to make them harmless, while used with minimessage without any additional
+hasle on developer side.
+
 ```java
-dispatcher.createTitle()
+AdventureMessageDispatcher.createTitle()
     .recipient(event.getPlayer())
-    .title(it -> it.template("Hello!"))
-    .subtitle(it -> it.template("It is a pleasure to see you there {{player.getName}}")
-    .variable("player", event.getPlayer()))
+    .title(it -> it.template(formatter, "Hello!"))
+    .subtitle(it -> it.template(formatter, "It is a pleasure to see you there {{player.getName}}"))
+    .variable("player", event.getPlayer())
     .times(2, 4, 2)
     .dispatch();
 
-dispatcher.createChat()
+AdventureMessageDispatcher.createChat()
     .recipient(Bukkit.getServer())
-    .template("{{player.getName}} has joined the server!")
+    .template(formatter, "{{player.getName}} has joined the server!")
     .variable("player", event.getPlayer())
     .dispatch();
 
-dispatcher.createActionBar()
+AdventureMessageDispatcher.createActionBar()
     .recipient(event.getPlayer())
-    .template("Honey is great, isn't it?")
+    .template(formatter, "Honey is great, isn't it?")
     .dispatch();
 ```
 
-## Without formatter, plain template:
-```java
-    AdventureMessageDispatcher.createChat()
-        .recipient(Bukkit.getServer())
-        .template(Component.text("Somebody joined to the server!").color(NamedTextColor.RED))
-        .dispatch();
+#### Without formatter
 
-    AdventureMessageDispatcher.createActionBar()
-        .recipient(event.getPlayer())
-        .template(formatter, "Honey is great, isn't it?")
-        .dispatch();
-  }
+*MessageDispatcher* provides a way to send messages without the need of using placeholders.
+
+```java
+AdventureMessageDispatcher.createChat()
+    .recipient(Bukkit.getServer())
+    .template(Component.text("Somebody joined to the server!").color(NamedTextColor.RED))
+    .dispatch();
+
+AdventureMessageDispatcher.createActionBar()
+    .recipient(event.getPlayer())
+    .template(Component.text("Honey is great, isn't it?"))
+    .dispatch();
 ```
 
-### Use case Kotlin
+### Use case (honey-kt-extesion)
 ```kotlin
 AdventureMessageDispatcher.createChat()
     .recipient(event.player)
@@ -119,9 +126,9 @@ AdventureMessageDispatcher.createTitle()
     .dispatch()
 ```
 
-### Dispatcher Synchronously vs Asynchronously:
-- [dispatch](https://github.com/rchomczyk/honey-common/src/dev/shiza/honey/message/dispatcher/MessageBaseDispatcher.java#L71)
+### Synchronous vs asynchronous message dispatching
+- [dispatch](https://github.com/rchomczyk/honey/tree/main/honey-common/src/dev/shiza/honey/message/dispatcher/MessageBaseDispatcher.java#L71)
   This method immediately delivers the message synchronously. It calls the deliver function with the rendered message and the recipient, and the action is completed immediately.
 
-- [dispatchAsync](https://github.com/rchomczyk/honey-common/src/dev/shiza/honey/message/dispatcher/MessageBaseDispatcher.java#L76)
+- [dispatchAsync](https://github.com/rchomczyk/honey/tree/main/honey-common/src/dev/shiza/honey/message/dispatcher/MessageBaseDispatcher.java#L76)
   This method delivers the message asynchronously. It returns a CompletableFuture that performs the message rendering in the background and then delivers the result once it's ready. It allows non-blocking behavior and handles exceptions asynchronously.
