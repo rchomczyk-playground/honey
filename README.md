@@ -126,7 +126,7 @@ AdventureMessageDispatcher.createTitle()
 
 ### Dispatcher Synchronously vs Asynchronously:
 ```java
-* [dispatch](https://github.com/rchomczyk/honey/blob/11-add-an-option-to-use-message-dispatcher-without-use-of-formatter/honey-common/src/dev/shiza/honey/message/dispatcher/MessageBaseDispatcher.java#L71) This method immediately delivers the message synchronously. It calls the deliver function with the rendered message and the recipient, and the action is completed immediately.
-* [dispatchAsync](https://github.com/rchomczyk/honey/blob/11-add-an-option-to-use-message-dispatcher-without-use-of-formatter/honey-common/src/dev/shiza/honey/message/dispatcher/MessageBaseDispatcher.java#L76) This method delivers the message asynchronously. It returns a CompletableFuture that performs the message rendering in the background and then delivers the result once it's ready. It allows non-blocking behavior and handles exceptions asynchronously.
+- [dispatch](https://github.com/rchomczyk/honey/blob/11-add-an-option-to-use-message-dispatcher-without-use-of-formatter/honey-common/src/dev/shiza/honey/message/dispatcher/MessageBaseDispatcher.java#L71) This method immediately delivers the message synchronously. It calls the deliver function with the rendered message and the recipient, and the action is completed immediately.
+- [dispatchAsync](https://github.com/rchomczyk/honey/blob/11-add-an-option-to-use-message-dispatcher-without-use-of-formatter/honey-common/src/dev/shiza/honey/message/dispatcher/MessageBaseDispatcher.java#L76) This method delivers the message asynchronously. It returns a CompletableFuture that performs the message rendering in the background and then delivers the result once it's ready. It allows non-blocking behavior and handles exceptions asynchronously.
 ``` 
 
