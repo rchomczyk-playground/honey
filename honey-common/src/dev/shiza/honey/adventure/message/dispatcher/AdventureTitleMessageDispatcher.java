@@ -97,14 +97,17 @@ public final class AdventureTitleMessageDispatcher
 
   @Override
   public void dispatch() {
-    times.dispatch();
-    title.dispatch();
-    subtitle.dispatch();
+    times.recipient(recipient).dispatch();
+    title.recipient(recipient).dispatch();
+    subtitle.recipient(recipient).dispatch();
   }
 
   @Override
   public CompletableFuture<List<Void>> dispatchAsync() {
     return CompletableFutures.allAsList(
-        ImmutableList.of(times.dispatchAsync(), title.dispatchAsync(), subtitle.dispatchAsync()));
+        ImmutableList.of(
+            times.recipient(recipient).dispatchAsync(),
+            title.recipient(recipient).dispatchAsync(),
+            subtitle.recipient(recipient).dispatchAsync()));
   }
 }
