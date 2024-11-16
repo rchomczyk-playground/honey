@@ -17,9 +17,7 @@ maven("https://repo.shiza.dev/releases")
 ```
 
 ```groovy
-repositories {
-    maven { url 'https://repo.shiza.dev/releases' }
-}
+maven { url 'https://repo.shiza.dev/releases' }
 ```
 
 ##### Add dependency
@@ -57,8 +55,8 @@ implementation 'dev.shiza:honey:2.0.0'
 
 A showcase of how to use *honey*, can be found in [honey-test-plugin](honey-test-plugin) module.
 
-```java
 ## With Formatter placeholder:
+```java
 
 /* for titles::audience */
 dispatcher.createTitle()
@@ -97,7 +95,7 @@ dispatcher.createActionBar()
   }
 ```
 
-## Use case Kotlin
+### Use case Kotlin
 ```kotlin
 AdventureMessageDispatcher.createChat()
     .recipient(event.player)
@@ -126,9 +124,9 @@ AdventureMessageDispatcher.createTitle()
     .dispatch()
 ```
 
-### Dispatcher Sync, Async:
+### Dispatcher Synchronously vs Asynchronously:
 ```java
-* [dispatch()](lololo) This method immediately delivers the message synchronously. It calls the deliver function with the rendered message and the recipient, and the action is completed immediately.
-* [dispatchAsync](lololo) This method delivers the message asynchronously. It returns a CompletableFuture that performs the message rendering in the background and then delivers the result once it's ready. It allows non-blocking behavior and handles exceptions asynchronously.
+* [dispatch](https://github.com/rchomczyk/honey/blob/11-add-an-option-to-use-message-dispatcher-without-use-of-formatter/honey-common/src/dev/shiza/honey/message/dispatcher/MessageBaseDispatcher.java#L71) This method immediately delivers the message synchronously. It calls the deliver function with the rendered message and the recipient, and the action is completed immediately.
+* [dispatchAsync](https://github.com/rchomczyk/honey/blob/11-add-an-option-to-use-message-dispatcher-without-use-of-formatter/honey-common/src/dev/shiza/honey/message/dispatcher/MessageBaseDispatcher.java#L76) This method delivers the message asynchronously. It returns a CompletableFuture that performs the message rendering in the background and then delivers the result once it's ready. It allows non-blocking behavior and handles exceptions asynchronously.
 ``` 
 
