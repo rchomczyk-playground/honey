@@ -57,7 +57,8 @@ public final class AdventureTitleMessageDispatcher
     final MessageDispatcher<Audience, Component> timesDispatcher =
         new MessageBaseDispatcher<>(
             recipient, (audience, component) -> audience.sendTitlePart(TitlePart.TIMES, titleTime));
-    return new AdventureTitleMessageDispatcher(timesDispatcher, title, subtitle, recipient);
+    return new AdventureTitleMessageDispatcher(
+        timesDispatcher.template(Component.empty()), title, subtitle, recipient);
   }
 
   @Override

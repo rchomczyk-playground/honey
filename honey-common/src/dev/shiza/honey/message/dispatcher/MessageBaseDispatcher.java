@@ -50,48 +50,21 @@ public final class MessageBaseDispatcher<VIEWER, RESULT>
 
   @Override
   public MessageDispatcher<VIEWER, RESULT> variable(final String key, final Object value) {
-    if (renderer instanceof FormattingMessageRenderer<RESULT> formattingRenderer) {
-      return new MessageBaseDispatcher<>(
-          new FormattingMessageRenderer<>(
-              formattingRenderer.formatter(),
-              formattingRenderer.message().placeholders(it -> it.withValue(key, value))),
-          recipient,
-          deliver);
-    }
-
-    throw new MessageDispatchingException(
-        "Could not add promised variable to message, because dispatcher does not a formatting renderer.");
+    final MessageRenderer<RESULT> newRenderer = renderer.variable(key, value);
+    return new MessageBaseDispatcher<>(newRenderer, recipient, deliver);
   }
 
   @Override
   public MessageDispatcher<VIEWER, RESULT> promisedVariable(final String key, final Object value) {
-    if (renderer instanceof FormattingMessageRenderer<RESULT> formattingRenderer) {
-      return new MessageBaseDispatcher<>(
-          new FormattingMessageRenderer<>(
-              formattingRenderer.formatter(),
-              formattingRenderer.message().placeholders(it -> it.withPromisedValue(key, value))),
-          recipient,
-          deliver);
-    }
-
-    throw new MessageDispatchingException(
-        "Could not add promised variable to message, because dispatcher does not a formatting renderer.");
+    final MessageRenderer<RESULT> newRenderer = renderer.promisedVariable(key, value);
+    return new MessageBaseDispatcher<>(newRenderer, recipient, deliver);
   }
 
   @Override
   public MessageDispatcher<VIEWER, RESULT> promisedVariable(
       final String key, final CompletableFuture<Object> value) {
-    if (renderer instanceof FormattingMessageRenderer<RESULT> formattingRenderer) {
-      return new MessageBaseDispatcher<>(
-          new FormattingMessageRenderer<>(
-              formattingRenderer.formatter(),
-              formattingRenderer.message().placeholders(it -> it.withPromisedValue(key, value))),
-          recipient,
-          deliver);
-    }
-
-    throw new MessageDispatchingException(
-        "Could not add promised variable to message, because dispatcher does not a formatting renderer.");
+    final MessageRenderer<RESULT> newRenderer = renderer.promisedVariable(key, value);
+    return new MessageBaseDispatcher<>(newRenderer, recipient, deliver);
   }
 
   @Override
