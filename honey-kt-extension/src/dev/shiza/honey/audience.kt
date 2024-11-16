@@ -3,10 +3,9 @@ import dev.shiza.honey.message.Message
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 
-typealias MessageFormatter = MessageFormatter<Component>
 typealias MessageDispatcher = MessageDispatcher<Audience, Component>
 
-fun AdventureMessageDispatcher.createChat(messageFormatter: MessageFormatter): MessageDispatcher =
+fun AdventureMessageDispatcher.createChat(): MessageDispatcher =
     MessageBaseDispatcher(
         messageFormatter, 
         Message.blank(),
@@ -14,7 +13,7 @@ fun AdventureMessageDispatcher.createChat(messageFormatter: MessageFormatter): M
         Audience::sendMessage
     )
 
-fun AdventureMessageDispatcher.createActionBar(messageFormatter: MessageFormatter): MessageDispatcher =
+fun AdventureMessageDispatcher.createActionBar(): MessageDispatcher =
     MessageBaseDispatcher(
         messageFormatter,
         Message.blank(),
@@ -22,7 +21,7 @@ fun AdventureMessageDispatcher.createActionBar(messageFormatter: MessageFormatte
         Audience::sendActionBar
     )
 
-fun Audience.createChat(messageFormatter: MessageFormatter): MessageDispatcher =
+fun Audience.createChat(): MessageDispatcher =
     MessageBaseDispatcher(
         messageFormatter, 
         Message.blank(),
@@ -30,7 +29,7 @@ fun Audience.createChat(messageFormatter: MessageFormatter): MessageDispatcher =
         Audience::sendMessage
     )
 
-fun Audience.createActionBar(messageFormatter: MessageFormatter): MessageDispatcher =
+fun Audience.createActionBar(): MessageDispatcher =
     MessageBaseDispatcher(
         messageFormatter, 
         Message.blank(),
