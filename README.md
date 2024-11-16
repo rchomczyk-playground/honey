@@ -17,5 +17,5 @@ maven("https://repo.shiza.dev/releases")
 ##### Add dependency
 
 ```kotlin
-implementation("dev.shiza:honey:1.2.1")
+implementation("dev.shiza:honey:1.3.0")
 ```
