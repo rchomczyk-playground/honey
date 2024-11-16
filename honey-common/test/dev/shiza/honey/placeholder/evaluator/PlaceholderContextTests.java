@@ -2,6 +2,7 @@ package dev.shiza.honey.placeholder.evaluator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class PlaceholderContextTests {
@@ -18,12 +19,10 @@ class PlaceholderContextTests {
   }
 
   @Test
-  void mergeContextsWithDuplicates() {
+  void mergeContextsWithDuplicatesShouldThrow() {
     final PlaceholderContext one = PlaceholderContext.create().withValue("hello", "world");
     final PlaceholderContext two = PlaceholderContext.create().withValue("hello", "world2");
-    final PlaceholderContext mergedContext = one.merge(two);
-    assertThat(mergedContext.getValues()).hasSize(1);
-    assertThat(mergedContext.getPromisedValues()).isEmpty();
+    Assertions.assertThatCode(() -> one.merge(two)).isInstanceOf(IllegalArgumentException.class);
   }
 
   @Test

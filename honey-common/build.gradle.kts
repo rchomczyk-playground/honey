@@ -7,8 +7,8 @@ plugins {
 
 dependencies {
     api(libs.futures)
-    compileOnly(libs.guava)
-    compileOnly(libs.bundles.adventure)
+    api(libs.guava)
+    api(libs.bundles.adventure)
 }
 
 honeyPublish {

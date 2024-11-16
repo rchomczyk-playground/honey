@@ -43,7 +43,9 @@ final class PlaceholderSanitizerImpl implements PlaceholderSanitizer {
             sanitizedExpression, placeholder.placeholder().key(), placeholder.evaluatedValue());
       }
     }
-    throw new PlaceholderSanitizationException(placeholder);
+
+    throw new PlaceholderSanitizationException(
+        "Could not sanitize placeholder with key: %s".formatted(placeholder.placeholder().key()));
   }
 
   @Override

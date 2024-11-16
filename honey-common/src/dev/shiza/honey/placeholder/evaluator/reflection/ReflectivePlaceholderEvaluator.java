@@ -38,6 +38,7 @@ final class ReflectivePlaceholderEvaluator implements PlaceholderEvaluator {
         if (matcher.hitEnd()) {
           return new EvaluatedPlaceholder(placeholder, visitor.complete());
         }
+
         continue;
       }
 
