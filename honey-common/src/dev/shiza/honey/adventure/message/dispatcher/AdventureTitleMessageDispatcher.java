@@ -19,9 +19,6 @@ import net.kyori.adventure.title.TitlePart;
  * This class is responsible for dispatching title messages to an audience in the Adventure
  * framework. It manages separate dispatchers for times, title, and subtitle, as well as keeping
  * track of the recipient.
- *
- * @param IN <Audience> the audience type that the messages are dispatched to
- * @param OUT <Component> the message component type
  */
 public final class AdventureTitleMessageDispatcher
     implements TitleMessageDispatcher<Audience, Component> {

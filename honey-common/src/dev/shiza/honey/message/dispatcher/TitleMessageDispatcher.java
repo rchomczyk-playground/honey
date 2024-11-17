@@ -8,8 +8,8 @@ import java.util.function.UnaryOperator;
  * Interface for a TitleMessageDispatcher which is responsible for sending titles, subtitles, and
  * managing their display times to specific recipients.
  *
- * @param IN <VIEWER> The type of the viewer/recipient for whom the messages are intended.
- * @param OUT <RESULT> The result type for operations that are performed by the MessageDispatcher.
+ * @param <VIEWER> The type of the viewer/recipient for whom the messages are intended.
+ * @param <RESULT> The result type for operations that are performed by the MessageDispatcher.
  */
 public interface TitleMessageDispatcher<VIEWER, RESULT> {
 

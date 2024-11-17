@@ -13,8 +13,8 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 * Internal class representing a base dispatcher for messages.
 * This class is marked as final and cannot be subclassed.
 *
-* @param IN <VIEWER> the type of recipient for the message
-* @param OUT <RESULT> the type of message result
+* @param <VIEWER> the type of recipient for the message
+* @param <RESULT> the type of message result
 */
 @Internal
 public final class MessageBaseDispatcher<VIEWER, RESULT>
