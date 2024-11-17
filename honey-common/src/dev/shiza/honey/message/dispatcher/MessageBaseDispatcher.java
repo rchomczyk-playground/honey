@@ -2,8 +2,8 @@ package dev.shiza.honey.message.dispatcher;
 
 import dev.shiza.honey.message.Message;
 import dev.shiza.honey.message.dispatcher.MessageRenderer.DelegatingMessageRenderer;
-import dev.shiza.honey.message.dispatcher.MessageRenderer.FormattingMessageRenderer;
 import dev.shiza.honey.message.dispatcher.MessageRenderer.EmptyMessageRenderer;
+import dev.shiza.honey.message.dispatcher.MessageRenderer.FormattingMessageRenderer;
 import dev.shiza.honey.message.formatter.MessageFormatter;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;

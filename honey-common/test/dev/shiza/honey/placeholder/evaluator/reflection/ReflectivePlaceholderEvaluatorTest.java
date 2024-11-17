@@ -11,9 +11,9 @@ import static dev.shiza.honey.placeholder.evaluator.reflection.ReflectivePlaceho
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
-import dev.shiza.honey.placeholder.visitor.PromisingPlaceholderVisitor;
-import dev.shiza.honey.placeholder.visitor.PlaceholderVisitorImpl;
 import dev.shiza.honey.placeholder.evaluator.EvaluatedPlaceholder;
+import dev.shiza.honey.placeholder.visitor.PlaceholderVisitorImpl;
+import dev.shiza.honey.placeholder.visitor.PromisingPlaceholderVisitor;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.Test;

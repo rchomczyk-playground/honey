@@ -10,34 +10,37 @@ import dev.shiza.honey.processor.ProcessorRegistry;
 import net.kyori.adventure.text.Component;
 
 /**
-* Represents a specific implementation of {@link MessageBaseFormatter} for handling Adventure components.
-* This class leverages the message formatting system specifically tailored for Adventure library components.
-*/
+ * Represents a specific implementation of {@link MessageBaseFormatter} for handling Adventure
+ * components. This class leverages the message formatting system specifically tailored for
+ * Adventure library components.
+ */
 public final class AdventureMessageFormatter extends MessageBaseFormatter<Component> {
 
   /**
-  * Constructs an AdventureMessageFormatter with required components for message compiling and processing.
-  *
-  * @param messageCompiler the compiler responsible for message compilation.
-  * @param placeholderContext the context for processing placeholders.
-  * @param placeholderResolver responsible for resolving placeholders.
-  * @param placeholderProcessor processor to apply transformations on placeholders.
-  * @param placeholderSanitizer sanitizer to clean or adjust placeholders according to specific rules.
-  * @param processorRegistry registry to keep track of processors and manage them.
-  */
+   * Constructs an AdventureMessageFormatter with required components for message compiling and
+   * processing.
+   *
+   * @param messageCompiler the compiler responsible for message compilation.
+   * @param placeholderContext the context for processing placeholders.
+   * @param placeholderResolver responsible for resolving placeholders.
+   * @param placeholderProcessor processor to apply transformations on placeholders.
+   * @param placeholderSanitizer sanitizer to clean or adjust placeholders according to specific
+   *     rules.
+   * @param processorRegistry registry to keep track of processors and manage them.
+   */
   AdventureMessageFormatter(
-    final MessageCompiler<Component> messageCompiler,
-    final PlaceholderContext placeholderContext,
-    final PlaceholderResolver placeholderResolver,
-    final PlaceholderProcessor placeholderProcessor,
-    final PlaceholderSanitizer placeholderSanitizer,
-    final ProcessorRegistry processorRegistry) {
+      final MessageCompiler<Component> messageCompiler,
+      final PlaceholderContext placeholderContext,
+      final PlaceholderResolver placeholderResolver,
+      final PlaceholderProcessor placeholderProcessor,
+      final PlaceholderSanitizer placeholderSanitizer,
+      final ProcessorRegistry processorRegistry) {
     super(
-      messageCompiler,
-      placeholderContext,
-      placeholderResolver,
-      placeholderProcessor,
-      placeholderSanitizer,
-      processorRegistry);
+        messageCompiler,
+        placeholderContext,
+        placeholderResolver,
+        placeholderProcessor,
+        placeholderSanitizer,
+        processorRegistry);
   }
 }

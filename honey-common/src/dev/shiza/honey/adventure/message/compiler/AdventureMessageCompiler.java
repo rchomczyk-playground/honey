@@ -14,11 +14,10 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.intellij.lang.annotations.Subst;
 
 /**
-* This class provides a mechanism to compile messages using the Adventure API MiniMessage format.
-* It translates sanitized content and placeholders into formatted Adventure {@link Component}s.
-*/
+ * This class provides a mechanism to compile messages using the Adventure API MiniMessage format.
+ * It translates sanitized content and placeholders into formatted Adventure {@link Component}s.
+ */
 final class AdventureMessageCompiler implements MessageCompiler<Component> {
-
 
   private final MiniMessage miniMessage;
 
@@ -27,12 +26,12 @@ final class AdventureMessageCompiler implements MessageCompiler<Component> {
   }
 
   /**
-  * Compiles the sanitized content and placeholders into an Adventure {@link Component}.
-  *
-  * @param sanitizedContent The sanitized content string to be compiled.
-  * @param placeholders The list of sanitized placeholders to be included in the content.
-  * @return The compiled message as an Adventure {@link Component}.
-  */
+   * Compiles the sanitized content and placeholders into an Adventure {@link Component}.
+   *
+   * @param sanitizedContent The sanitized content string to be compiled.
+   * @param placeholders The list of sanitized placeholders to be included in the content.
+   * @return The compiled message as an Adventure {@link Component}.
+   */
   @Override
   public Component compile(
       final String sanitizedContent, final List<SanitizedPlaceholder> placeholders) {
@@ -41,11 +40,11 @@ final class AdventureMessageCompiler implements MessageCompiler<Component> {
   }
 
   /**
-  * Converts a list of {@link SanitizedPlaceholder} into an array of {@link TagResolver}.
-  *
-  * @param placeholders The list of placeholders to be converted.
-  * @return An array of {@link TagResolver}.
-  */
+   * Converts a list of {@link SanitizedPlaceholder} into an array of {@link TagResolver}.
+   *
+   * @param placeholders The list of placeholders to be converted.
+   * @return An array of {@link TagResolver}.
+   */
   private TagResolver[] getPlaceholderTags(final List<SanitizedPlaceholder> placeholders) {
     final TagResolver[] tagResolvers = new TagResolver[placeholders.size()];
     for (int index = 0; index < tagResolvers.length; index++) {
@@ -56,13 +55,14 @@ final class AdventureMessageCompiler implements MessageCompiler<Component> {
   }
 
   /**
-  * Creates a {@link TagResolver} based on the key and the evaluated value of the placeholder.
-  * The method handles different types of evaluated values by converting them into suitable tag resolutions.
-  *
-  * @param key The key associated with the placeholder.
-  * @param evaluatedValue The evaluated value of the placeholder.
-  * @return The appropriate {@link TagResolver} based on the type of evaluated value.
-  */
+   * Creates a {@link TagResolver} based on the key and the evaluated value of the placeholder. The
+   * method handles different types of evaluated values by converting them into suitable tag
+   * resolutions.
+   *
+   * @param key The key associated with the placeholder.
+   * @param evaluatedValue The evaluated value of the placeholder.
+   * @return The appropriate {@link TagResolver} based on the type of evaluated value.
+   */
   private TagResolver getPlaceholderTags(
       final @Subst("default") String key, final Object evaluatedValue) {
     if (evaluatedValue instanceof Component component) {

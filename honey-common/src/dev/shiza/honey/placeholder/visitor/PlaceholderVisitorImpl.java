@@ -1,8 +1,8 @@
 package dev.shiza.honey.placeholder.visitor;
 
 import dev.shiza.honey.placeholder.evaluator.PlaceholderContext;
-import dev.shiza.honey.placeholder.resolver.Placeholder;
 import dev.shiza.honey.placeholder.evaluator.reflection.ReflectivePlaceholderEvaluationException;
+import dev.shiza.honey.placeholder.resolver.Placeholder;
 import java.util.function.UnaryOperator;
 
 public final class PlaceholderVisitorImpl implements PlaceholderVisitor<Object> {
