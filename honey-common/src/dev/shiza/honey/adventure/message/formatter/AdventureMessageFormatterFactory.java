@@ -16,44 +16,65 @@ import dev.shiza.honey.processor.ProcessorRegistry;
 import dev.shiza.honey.processor.ProcessorRegistryFactory;
 import net.kyori.adventure.text.Component;
 
+/**
+* Provides factory methods to create instances of AdventureMessageFormatter.
+* This class is utility-based and should not be instantiated.
+*/
 public final class AdventureMessageFormatterFactory {
 
-  private AdventureMessageFormatterFactory() {}
+    private AdventureMessageFormatterFactory() {
+    }
 
-  public static AdventureMessageFormatter create(
-      final MessageCompiler<Component> messageCompiler,
-      final PlaceholderContext placeholderContext,
-      final PlaceholderResolver placeholderResolver,
-      final PlaceholderProcessor placeholderProcessor,
-      final PlaceholderSanitizer placeholderSanitizer,
-      final ProcessorRegistry processorRegistry) {
-    return new AdventureMessageFormatter(
-        messageCompiler,
-        placeholderContext,
-        placeholderResolver,
-        placeholderProcessor,
-        placeholderSanitizer,
-        processorRegistry);
-  }
+    /**
+    * Creates an instance of AdventureMessageFormatter with specified dependencies.
+    *
+    * @param messageCompiler the compiler used to compile messages.
+    * @param placeholderContext the context holding placeholder values.
+    * @param placeholderResolver the resolver used to resolve placeholders.
+    * @param placeholderProcessor the processor to process the placeholders.
+    * @param placeholderSanitizer the sanitizer to sanitize placeholders.
+    * @param processorRegistry the registry holding different processors.
+    * @return an instance of AdventureMessageFormatter.
+    */
+    public static AdventureMessageFormatter create(
+        final MessageCompiler<Component> messageCompiler,
+        final PlaceholderContext placeholderContext,
+        final PlaceholderResolver placeholderResolver,
+        final PlaceholderProcessor placeholderProcessor,
+        final PlaceholderSanitizer placeholderSanitizer,
+        final ProcessorRegistry processorRegistry) {
+        return new AdventureMessageFormatter(
+            messageCompiler,
+            placeholderContext,
+            placeholderResolver,
+            placeholderProcessor,
+            placeholderSanitizer,
+            processorRegistry);
+    }
 
-  public static AdventureMessageFormatter create() {
-    final MessageCompiler<Component> messageCompiler = AdventureMessageCompilerFactory.create();
-    final ImplicitConversion implicitConversion = ImplicitConversion.create();
-    final PlaceholderContext placeholderContext = PlaceholderContext.create();
-    final PlaceholderResolver placeholderResolver = PlaceholderResolverFactory.create();
-    final PlaceholderSanitizer placeholderSanitizer = PlaceholderSanitizerFactory.create();
-    final PlaceholderEvaluator placeholderEvaluator =
+    /**
+    * Creates a default instance of AdventureMessageFormatter with automatically initialized dependencies.
+    *
+    * @return an instance of AdventureMessageFormatter with default configuration.
+    */
+    public static AdventureMessageFormatter create() {
+        final MessageCompiler<Component> messageCompiler = AdventureMessageCompilerFactory.create();
+        final ImplicitConversion implicitConversion = ImplicitConversion.create();
+        final PlaceholderContext placeholderContext = PlaceholderContext.create();
+        final PlaceholderResolver placeholderResolver = PlaceholderResolverFactory.create();
+        final PlaceholderSanitizer placeholderSanitizer = PlaceholderSanitizerFactory.create();
+        final PlaceholderEvaluator placeholderEvaluator =
         ReflectivePlaceholderEvaluatorFactory.create();
-    final PlaceholderProcessor placeholderProcessor =
+        final PlaceholderProcessor placeholderProcessor =
         PlaceholderProcessorFactory.create(
             placeholderEvaluator, placeholderSanitizer, implicitConversion);
-    final ProcessorRegistry processorRegistry = ProcessorRegistryFactory.create();
-    return create(
-        messageCompiler,
-        placeholderContext,
-        placeholderResolver,
-        placeholderProcessor,
-        placeholderSanitizer,
-        processorRegistry);
-  }
+        final ProcessorRegistry processorRegistry = ProcessorRegistryFactory.create();
+        return create(
+            messageCompiler,
+            placeholderContext,
+            placeholderResolver,
+            placeholderProcessor,
+            placeholderSanitizer,
+            processorRegistry);
+    }
 }

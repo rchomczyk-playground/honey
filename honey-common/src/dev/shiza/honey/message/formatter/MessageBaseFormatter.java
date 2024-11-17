@@ -14,6 +14,10 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.ApiStatus.Internal;
 
+/**
+* Abstract base class for formatting messages that encapsulates common logic.
+* @param <T> The type of the output formatted message.
+*/
 @Internal
 public abstract class MessageBaseFormatter<T> implements MessageFormatter<T> {
 
@@ -39,6 +43,11 @@ public abstract class MessageBaseFormatter<T> implements MessageFormatter<T> {
     this.processorRegistry = processorRegistry;
   }
 
+  /**
+  * Processes a message synchronously and returns the formatted output.
+  * @param message The message to format.
+  * @return The formatted message.
+  */
   @Override
   public T format(final Message message) {
     final Set<Placeholder> placeholders = placeholderResolver.resolve(message.content());
@@ -51,6 +60,11 @@ public abstract class MessageBaseFormatter<T> implements MessageFormatter<T> {
     return compile(message, sanitizedPlaceholders);
   }
 
+  /**
+  * Processes a message asynchronously and returns a CompletableFuture that will yield the formatted output.
+  * @param message The message to format.
+  * @return A CompletableFuture that upon completion will provide the formatted message.
+  */
   @Override
   public CompletableFuture<T> formatAsync(final Message message) {
     final Set<Placeholder> placeholders = placeholderResolver.resolve(message.content());
@@ -63,6 +77,12 @@ public abstract class MessageBaseFormatter<T> implements MessageFormatter<T> {
         .thenApply(sanitizedPlaceholders -> compile(message, sanitizedPlaceholders));
   }
 
+  /**
+  * Compiles the message content with sanitized placeholders into the final formatted message.
+  * @param message The original message.
+  * @param placeholders The list of sanitized placeholders.
+  * @return The compiled message of type T.
+  */
   private T compile(final Message message, final List<SanitizedPlaceholder> placeholders) {
     final String processedContent = processorRegistry.preprocess(message.content());
     final String sanitizedContent =
