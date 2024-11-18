@@ -1,7 +1,6 @@
 package dev.shiza.honey.placeholder.sanitizer;
 
 import dev.shiza.honey.placeholder.evaluator.EvaluatedPlaceholder;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -46,16 +45,6 @@ final class PlaceholderSanitizerImpl implements PlaceholderSanitizer {
 
     throw new PlaceholderSanitizationException(
         "Could not sanitize placeholder with key: %s".formatted(placeholder.placeholder().key()));
-  }
-
-  @Override
-  public List<SanitizedPlaceholder> getSanitizedPlaceholders(
-      final List<EvaluatedPlaceholder> placeholders) {
-    final List<SanitizedPlaceholder> sanitizedPlaceholders = new ArrayList<>();
-    for (final EvaluatedPlaceholder placeholder : placeholders) {
-      sanitizedPlaceholders.add(getSanitizedPlaceholder(placeholder));
-    }
-    return sanitizedPlaceholders;
   }
 
   private String getSanitizedExpression(final String expression) {

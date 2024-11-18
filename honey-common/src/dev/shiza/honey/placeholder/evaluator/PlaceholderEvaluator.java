@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
+@FunctionalInterface
 public interface PlaceholderEvaluator {
 
   EvaluatedPlaceholder evaluate(
