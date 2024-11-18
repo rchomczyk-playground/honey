@@ -1,6 +1,6 @@
 package dev.shiza.honey.placeholder.sanitizer;
 
-import dev.shiza.honey.placeholder.evaluator.EvaluatedPlaceholder;
+import dev.shiza.honey.placeholder.evaluator.PlaceholderEvaluator.EvaluatedPlaceholder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,4 +18,6 @@ public interface PlaceholderSanitizer {
     }
     return sanitizedPlaceholders;
   }
+
+  record SanitizedPlaceholder(String key, String expression, Object evaluatedValue) {}
 }

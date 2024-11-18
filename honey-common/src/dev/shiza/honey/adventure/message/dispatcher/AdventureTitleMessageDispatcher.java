@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.spotify.futures.CompletableFutures;
 import dev.shiza.honey.message.dispatcher.MessageBaseDispatcher;
 import dev.shiza.honey.message.dispatcher.MessageDispatcher;
+import dev.shiza.honey.message.dispatcher.MessageRenderer;
 import dev.shiza.honey.message.dispatcher.TitleMessageDispatcher;
 import java.time.Duration;
 import java.util.List;
@@ -18,7 +19,7 @@ import net.kyori.adventure.title.TitlePart;
 /**
  * This class is responsible for dispatching title messages to an audience in the Adventure
  * framework. It manages separate dispatchers for times, title, and subtitle, as well as keeping
- * track of the recipient.
+ * track of the viewer.
  */
 public final class AdventureTitleMessageDispatcher
     implements TitleMessageDispatcher<Audience, Component> {
@@ -26,31 +27,31 @@ public final class AdventureTitleMessageDispatcher
   private final MessageDispatcher<Audience, Component> times;
   private final MessageDispatcher<Audience, Component> title;
   private final MessageDispatcher<Audience, Component> subtitle;
-  private final Audience recipient;
+  private final Audience viewer;
 
   /**
    * Constructs a new AdventureTitleMessageDispatcher with specified dispatchers for times, title,
-   * subtitle and a recipient.
+   * subtitle and a viewer.
    *
    * @param times the dispatcher for handling the timing of title messages
    * @param title the dispatcher for handling the main title messages
    * @param subtitle the dispatcher for handling the subtitle messages
-   * @param recipient the audience that will receive the title messages
+   * @param viewer the audience that will receive the title messages
    */
   public AdventureTitleMessageDispatcher(
       final MessageDispatcher<Audience, Component> times,
       final MessageDispatcher<Audience, Component> title,
       final MessageDispatcher<Audience, Component> subtitle,
-      final Audience recipient) {
+      final Audience viewer) {
     this.times = times;
     this.title = title;
     this.subtitle = subtitle;
-    this.recipient = recipient;
+    this.viewer = viewer;
   }
 
   /**
    * Default constructor that initializes with default dispatchers for times, title, and subtitle,
-   * with an empty recipient.
+   * with an empty viewer.
    */
   public AdventureTitleMessageDispatcher() {
     this(
@@ -82,9 +83,9 @@ public final class AdventureTitleMessageDispatcher
             Duration.ofSeconds(fadeIn), Duration.ofSeconds(stay), Duration.ofSeconds(fadeOut));
     final MessageDispatcher<Audience, Component> timesDispatcher =
         new MessageBaseDispatcher<>(
-            recipient, (audience, component) -> audience.sendTitlePart(TitlePart.TIMES, titleTime));
+            viewer, (audience, component) -> audience.sendTitlePart(TitlePart.TIMES, titleTime));
     return new AdventureTitleMessageDispatcher(
-        timesDispatcher.template(Component.empty()), title, subtitle, recipient);
+        timesDispatcher.template(Component.empty()), title, subtitle, viewer);
   }
 
   /**
@@ -96,7 +97,7 @@ public final class AdventureTitleMessageDispatcher
   @Override
   public TitleMessageDispatcher<Audience, Component> title(
       final UnaryOperator<MessageDispatcher<Audience, Component>> consumer) {
-    return new AdventureTitleMessageDispatcher(times, consumer.apply(title), subtitle, recipient);
+    return new AdventureTitleMessageDispatcher(times, consumer.apply(title), subtitle, viewer);
   }
 
   /**
@@ -108,30 +109,40 @@ public final class AdventureTitleMessageDispatcher
   @Override
   public TitleMessageDispatcher<Audience, Component> subtitle(
       final UnaryOperator<MessageDispatcher<Audience, Component>> consumer) {
-    return new AdventureTitleMessageDispatcher(times, title, consumer.apply(subtitle), recipient);
+    return new AdventureTitleMessageDispatcher(times, title, consumer.apply(subtitle), viewer);
+  }
+
+  @Override
+  public TitleMessageDispatcher<Audience, Component> placeholders(
+      final UnaryOperator<MessageRenderer<Component>> consumer) {
+    return new AdventureTitleMessageDispatcher(
+        times.placeholders(consumer),
+        title.placeholders(consumer),
+        subtitle.placeholders(consumer),
+        viewer);
   }
 
   /**
-   * Updates the recipient of title messages.
+   * Updates the viewer of title messages.
    *
-   * @param recipient the new recipient for the title messages
-   * @return a new instance of AdventureTitleMessageDispatcher with the updated recipient
+   * @param viewer the new viewer for the title messages
+   * @return a new instance of AdventureTitleMessageDispatcher with the updated viewer
    */
   @Override
-  public TitleMessageDispatcher<Audience, Component> recipient(final Audience recipient) {
-    return new AdventureTitleMessageDispatcher(times, title, subtitle, recipient);
+  public TitleMessageDispatcher<Audience, Component> viewer(final Audience viewer) {
+    return new AdventureTitleMessageDispatcher(times, title, subtitle, viewer);
   }
 
-  /** Dispatches the title, subtitle, and timing messages to the recipient synchronously. */
+  /** Dispatches the title, subtitle, and timing messages to the viewer synchronously. */
   @Override
   public void dispatch() {
-    times.recipient(recipient).dispatch();
-    title.recipient(recipient).dispatch();
-    subtitle.recipient(recipient).dispatch();
+    times.viewer(viewer).dispatch();
+    title.viewer(viewer).dispatch();
+    subtitle.viewer(viewer).dispatch();
   }
 
   /**
-   * Dispatches the title, subtitle, and timing messages to the recipient asynchronously.
+   * Dispatches the title, subtitle, and timing messages to the viewer asynchronously.
    *
    * @return a CompletableFuture representing pending completion of the task, with a list of Void,
    *     indicating when all dispatches are complete
@@ -140,8 +151,8 @@ public final class AdventureTitleMessageDispatcher
   public CompletableFuture<List<Void>> dispatchAsync() {
     return CompletableFutures.allAsList(
         ImmutableList.of(
-            times.recipient(recipient).dispatchAsync(),
-            title.recipient(recipient).dispatchAsync(),
-            subtitle.recipient(recipient).dispatchAsync()));
+            times.viewer(viewer).dispatchAsync(),
+            title.viewer(viewer).dispatchAsync(),
+            subtitle.viewer(viewer).dispatchAsync()));
   }
 }

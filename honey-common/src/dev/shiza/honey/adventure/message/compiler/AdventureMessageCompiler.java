@@ -6,7 +6,7 @@ import static net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unpa
 
 import dev.shiza.honey.adventure.placeholder.ParsableValue;
 import dev.shiza.honey.message.compiler.MessageCompiler;
-import dev.shiza.honey.placeholder.sanitizer.SanitizedPlaceholder;
+import dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizer.SanitizedPlaceholder;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;

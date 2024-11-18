@@ -1,7 +1,8 @@
 package dev.shiza.honey.placeholder.evaluator;
 
+import dev.shiza.honey.placeholder.PlaceholderContext;
+import dev.shiza.honey.placeholder.evaluator.visitor.PlaceholderVisitor;
 import dev.shiza.honey.placeholder.resolver.Placeholder;
-import dev.shiza.honey.placeholder.visitor.PlaceholderVisitor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -25,4 +26,6 @@ public interface PlaceholderEvaluator {
     }
     return evaluatedPlaceholders;
   }
+
+  record EvaluatedPlaceholder(Placeholder placeholder, Object evaluatedValue) {}
 }

@@ -9,7 +9,7 @@ fun times(fadeIn: Int, stay: Int, fadeOut: Int): Triple<Int, Int, Int> =
     Triple(fadeIn, stay, fadeOut)
 
 fun AdventureMessageDispatcher.createTitle(
-    recipient: Audience,
+    viewer: Audience,
     titleConfig: MessageConfigurer,
     subtitleConfig: MessageConfigurer,
     fadeIn: Int,
@@ -17,7 +17,7 @@ fun AdventureMessageDispatcher.createTitle(
     fadeOut: Int
 ): TitleMessageDispatcher<Audience, Component> =
     AdventureMessageDispatcher.createTitle()
-        .recipient(recipient)
+        .viewer(viewer)
         .title { base -> base.apply(titleConfig) }
         .subtitle { base -> base.apply(subtitleConfig) }
         .times(fadeIn, stay, fadeOut)
@@ -30,7 +30,7 @@ fun Audience.createTitle(
     fadeOut: Int
 ): TitleMessageDispatcher<Audience, Component> =
     AdventureMessageDispatcher.createTitle()
-        .recipient(this)
+        .viewer(this)
         .title { base -> base.apply(titleConfig) }
         .subtitle { base -> base.apply(subtitleConfig) }
         .times(fadeIn, stay, fadeOut)
@@ -43,7 +43,7 @@ fun Player.createTitle(
     fadeOut: Int
 ): TitleMessageDispatcher<Audience, Component> =
     AdventureMessageDispatcher.createTitle()
-        .recipient(this)
+        .viewer(this)
         .title { base -> base.apply(titleConfig) }
         .subtitle { base -> base.apply(subtitleConfig) }
         .times(fadeIn, stay, fadeOut)

@@ -1,14 +1,15 @@
-package dev.shiza.honey.placeholder.sanitizer;
+package dev.shiza.honey.placeholder.adventure.placeholder.sanitizer;
 
-import static dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizerImplTestUtils.SANITIZER;
-import static dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizerImplTestUtils.placeholder;
+import static dev.shiza.honey.placeholder.adventure.placeholder.sanitizer.AdventurePlaceholderSanitizerTestUtils.SANITIZER;
+import static dev.shiza.honey.placeholder.adventure.placeholder.sanitizer.AdventurePlaceholderSanitizerTestUtils.placeholder;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizer.SanitizedPlaceholder;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-class PlaceholderSanitizerImplTest {
+class AdventurePlaceholderSanitizerTest {
 
   @Test
   void sanitizeContentWithoutPlaceholders() {
@@ -73,7 +74,7 @@ class PlaceholderSanitizerImplTest {
                 content,
                 SANITIZER.getSanitizedPlaceholders(
                     expressions.stream()
-                        .map(PlaceholderSanitizerImplTestUtils::placeholder)
+                        .map(AdventurePlaceholderSanitizerTestUtils::placeholder)
                         .toList())))
         .isEqualTo(expectedValue);
   }

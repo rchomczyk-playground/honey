@@ -2,12 +2,13 @@ package dev.shiza.honey.placeholder.evaluator.reflection;
 
 import static java.time.Duration.ofSeconds;
 
-import dev.shiza.honey.placeholder.evaluator.PlaceholderContext;
+import dev.shiza.honey.placeholder.PlaceholderContext;
 import dev.shiza.honey.placeholder.evaluator.PlaceholderEvaluator;
 import dev.shiza.honey.placeholder.evaluator.reflection.ReflectivePlaceholderEvaluatorTest.Account;
 import dev.shiza.honey.placeholder.evaluator.reflection.ReflectivePlaceholderEvaluatorTest.User;
 import dev.shiza.honey.placeholder.resolver.Placeholder;
 import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
 
 final class ReflectivePlaceholderEvaluatorTestUtils {
 
@@ -22,8 +23,8 @@ final class ReflectivePlaceholderEvaluatorTestUtils {
       PlaceholderContext.create().withValue("account", ACCOUNT).withValue("user", USER);
   static final PlaceholderContext ASYNC_CONTEXT =
       PlaceholderContext.create()
-          .withPromisedValue("account", ACCOUNT)
-          .withPromisedValue("user", USER);
+          .withAsynchronousValue("account", CompletableFuture.completedFuture(ACCOUNT))
+          .withAsynchronousValue("user", CompletableFuture.completedFuture(USER));
   static final PlaceholderEvaluator EVALUATOR = new ReflectivePlaceholderEvaluator();
 
   static Placeholder placeholder(final String expression) {

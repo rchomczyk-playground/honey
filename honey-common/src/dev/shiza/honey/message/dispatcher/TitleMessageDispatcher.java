@@ -6,9 +6,9 @@ import java.util.function.UnaryOperator;
 
 /**
  * Interface for a TitleMessageDispatcher which is responsible for sending titles, subtitles, and
- * managing their display times to specific recipients.
+ * managing their display times to specific viewers.
  *
- * @param <VIEWER> The type of the viewer/recipient for whom the messages are intended.
+ * @param <VIEWER> The type of the viewer for whom the messages are intended.
  * @param <RESULT> The result type for operations that are performed by the MessageDispatcher.
  */
 public interface TitleMessageDispatcher<VIEWER, RESULT> {
@@ -41,19 +41,22 @@ public interface TitleMessageDispatcher<VIEWER, RESULT> {
   TitleMessageDispatcher<VIEWER, RESULT> subtitle(
       final UnaryOperator<MessageDispatcher<VIEWER, RESULT>> consumer);
 
+  TitleMessageDispatcher<VIEWER, RESULT> placeholders(
+      final UnaryOperator<MessageRenderer<RESULT>> consumer);
+
   /**
-   * Sets the recipient of the title message.
+   * Sets the viewer of the title message.
    *
-   * @param recipient The viewer/recipient who will receive the message.
+   * @param viewer The viewer who will receive the message.
    * @return An instance of TitleMessageDispatcher for method chaining.
    */
-  TitleMessageDispatcher<VIEWER, RESULT> recipient(final VIEWER recipient);
+  TitleMessageDispatcher<VIEWER, RESULT> viewer(final VIEWER viewer);
 
-  /** Dispatches the title and subtitle to the recipient synchronously. */
+  /** Dispatches the title and subtitle to the viewer synchronously. */
   void dispatch();
 
   /**
-   * Dispatches the title and subtitle to the recipient asynchronously.
+   * Dispatches the title and subtitle to the viewer asynchronously.
    *
    * @return A CompletableFuture that completes with a list of results (normally empty) once the
    *     message dispatch operation is complete.
