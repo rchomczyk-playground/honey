@@ -7,7 +7,7 @@ import java.util.concurrent.CompletableFuture;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class PlaceholderContextTests {
+final class PlaceholderContextTest {
 
   @Test
   void mergeContexts() {

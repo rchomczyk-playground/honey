@@ -25,11 +25,9 @@ final class ExampleListener implements Listener {
         .title(it -> it.template(formatter, "Hello {{number}}!"))
         .subtitle(
             it ->
-                it.template(
-                        formatter,
-                        "It is a pleasure to see you there {{number}} {{player.getName}}")
+                it.template(formatter, "It is a pleasure to see you there {{number}} {{player}}")
                     .placeholders(
-                        environment -> environment.replace("player", event.getPlayer())))
+                        environment -> environment.replace("player", event.getPlayer().getName())))
         .placeholders(environment -> environment.replace("number", 15))
         .dispatch();
 

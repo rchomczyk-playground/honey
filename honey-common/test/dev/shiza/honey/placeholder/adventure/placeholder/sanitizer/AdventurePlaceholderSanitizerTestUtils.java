@@ -8,6 +8,8 @@ import dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizer;
 final class AdventurePlaceholderSanitizerTestUtils {
 
   static final PlaceholderSanitizer SANITIZER = AdventurePlaceholderSanitizerFactory.create();
+  static final PlaceholderSanitizer REFLECTIVE_SANITIZER =
+      AdventurePlaceholderSanitizerFactory.createReflective();
 
   private AdventurePlaceholderSanitizerTestUtils() {}
 

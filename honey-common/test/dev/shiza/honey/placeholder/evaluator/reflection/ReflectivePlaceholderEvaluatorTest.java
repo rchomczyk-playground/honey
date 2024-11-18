@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.Test;
 
-class ReflectivePlaceholderEvaluatorTest {
+final class ReflectivePlaceholderEvaluatorTest {
 
   @Test
   void syncEvaluationToUnknownValue() {
