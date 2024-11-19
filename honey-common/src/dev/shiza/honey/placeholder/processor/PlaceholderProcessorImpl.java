@@ -2,14 +2,13 @@ package dev.shiza.honey.placeholder.processor;
 
 import com.spotify.futures.CompletableFutures;
 import dev.shiza.honey.conversion.ImplicitConversion;
-import dev.shiza.honey.placeholder.evaluator.EvaluatedPlaceholder;
-import dev.shiza.honey.placeholder.evaluator.PlaceholderContext;
+import dev.shiza.honey.placeholder.PlaceholderContext;
 import dev.shiza.honey.placeholder.evaluator.PlaceholderEvaluator;
+import dev.shiza.honey.placeholder.evaluator.PlaceholderEvaluator.EvaluatedPlaceholder;
+import dev.shiza.honey.placeholder.evaluator.visitor.PlaceholderVisitor;
 import dev.shiza.honey.placeholder.resolver.Placeholder;
 import dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizer;
-import dev.shiza.honey.placeholder.sanitizer.SanitizedPlaceholder;
-import dev.shiza.honey.placeholder.visitor.PlaceholderVisitorImpl;
-import dev.shiza.honey.placeholder.visitor.PromisingPlaceholderVisitor;
+import dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizer.SanitizedPlaceholder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -34,7 +33,7 @@ final class PlaceholderProcessorImpl implements PlaceholderProcessor {
   public List<SanitizedPlaceholder> process(
       final PlaceholderContext context, final Set<Placeholder> placeholders) {
     final List<EvaluatedPlaceholder> evaluatedPlaceholders =
-        placeholderEvaluator.evaluate(context, PlaceholderVisitorImpl::create, placeholders);
+        placeholderEvaluator.evaluate(context, PlaceholderVisitor::synchronousVisitor, placeholders);
     final List<SanitizedPlaceholder> sanitizedPlaceholders =
         placeholderSanitizer.getSanitizedPlaceholders(evaluatedPlaceholders);
     return convertPlaceholders(sanitizedPlaceholders);
@@ -44,7 +43,7 @@ final class PlaceholderProcessorImpl implements PlaceholderProcessor {
   public CompletableFuture<List<SanitizedPlaceholder>> processAsync(
       final PlaceholderContext context, final Set<Placeholder> placeholders) {
     final List<EvaluatedPlaceholder> evaluatedPlaceholders =
-        placeholderEvaluator.evaluate(context, PromisingPlaceholderVisitor::create, placeholders);
+        placeholderEvaluator.evaluate(context, PlaceholderVisitor::asynchronousVisitor, placeholders);
     return unwrapPromisedValues(evaluatedPlaceholders)
         .thenApply(placeholderSanitizer::getSanitizedPlaceholders)
         .thenApply(this::convertPlaceholders);

@@ -11,22 +11,24 @@ import static dev.shiza.honey.placeholder.evaluator.reflection.ReflectivePlaceho
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
-import dev.shiza.honey.placeholder.evaluator.EvaluatedPlaceholder;
-import dev.shiza.honey.placeholder.visitor.PlaceholderVisitorImpl;
-import dev.shiza.honey.placeholder.visitor.PromisingPlaceholderVisitor;
+import dev.shiza.honey.placeholder.evaluator.PlaceholderEvaluator.EvaluatedPlaceholder;
+import dev.shiza.honey.placeholder.evaluator.visitor.PlaceholderVisitingException;
+import dev.shiza.honey.placeholder.evaluator.visitor.PlaceholderVisitor;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.Test;
 
-class ReflectivePlaceholderEvaluatorTest {
+final class ReflectivePlaceholderEvaluatorTest {
 
   @Test
   void syncEvaluationToUnknownValue() {
     assertThatCode(
             () ->
                 EVALUATOR.evaluate(
-                    SYNC_CONTEXT, PlaceholderVisitorImpl.create(), placeholder("unknown.value")))
-        .isInstanceOf(ReflectivePlaceholderEvaluationException.class)
+                    SYNC_CONTEXT,
+                    PlaceholderVisitor.synchronousVisitor(),
+                    placeholder("unknown.value")))
+        .isInstanceOf(PlaceholderVisitingException.class)
         .hasMessageMatching(
             "Could not evaluate placeholder with key \\{\\{(.*?)}}, because of unknown variable named (\\w+)");
   }
@@ -36,7 +38,9 @@ class ReflectivePlaceholderEvaluatorTest {
     assertThatCode(
             () ->
                 EVALUATOR.evaluate(
-                    SYNC_CONTEXT, PlaceholderVisitorImpl.create(), placeholder("user.test")))
+                    SYNC_CONTEXT,
+                    PlaceholderVisitor.synchronousVisitor(),
+                    placeholder("user.test")))
         .isInstanceOf(ReflectivePlaceholderEvaluationException.class)
         .hasMessageMatching(
             "Could not get method handle for (\\w+) parent with (\\w+) path, because of unexpected exception.");
@@ -59,7 +63,8 @@ class ReflectivePlaceholderEvaluatorTest {
 
   private void assertSyncEvaluationEqualTo(final String expression, final Object expectedValue) {
     final EvaluatedPlaceholder evaluation =
-        EVALUATOR.evaluate(SYNC_CONTEXT, PlaceholderVisitorImpl.create(), placeholder(expression));
+        EVALUATOR.evaluate(
+            SYNC_CONTEXT, PlaceholderVisitor.synchronousVisitor(), placeholder(expression));
     assertThat(evaluation.evaluatedValue()).isEqualTo(expectedValue);
   }
 
@@ -68,16 +73,19 @@ class ReflectivePlaceholderEvaluatorTest {
     assertThatCode(
             () ->
                 EVALUATOR.evaluate(
-                    ASYNC_CONTEXT, PromisingPlaceholderVisitor.create(), placeholder("unknown.value")))
-        .isInstanceOf(ReflectivePlaceholderEvaluationException.class)
+                    ASYNC_CONTEXT,
+                    PlaceholderVisitor.asynchronousVisitor(),
+                    placeholder("unknown.value")))
+        .isInstanceOf(PlaceholderVisitingException.class)
         .hasMessageMatching(
-            "Could not evaluate placeholder with key \\{\\{(.*?)}}, because of unknown promised variable named (\\w+)");
+            "Could not evaluate placeholder with key \\{\\{(.*?)}}, because of unknown variable named (\\w+)");
   }
 
   @Test
   void asyncEvaluationToUnknownChild() {
     final EvaluatedPlaceholder evaluation =
-        EVALUATOR.evaluate(ASYNC_CONTEXT, PromisingPlaceholderVisitor.create(), placeholder("user.test"));
+        EVALUATOR.evaluate(
+            ASYNC_CONTEXT, PlaceholderVisitor.asynchronousVisitor(), placeholder("user.test"));
     assertThat((CompletableFuture<?>) evaluation.evaluatedValue())
         .isCompletedExceptionally()
         .failsWithin(INVOCATION_TIMEOUT)
@@ -104,7 +112,8 @@ class ReflectivePlaceholderEvaluatorTest {
 
   private void assertAsyncEvaluationEqualTo(final String expression, final Object expectedValue) {
     final EvaluatedPlaceholder evaluation =
-        EVALUATOR.evaluate(ASYNC_CONTEXT, PromisingPlaceholderVisitor.create(), placeholder(expression));
+        EVALUATOR.evaluate(
+            ASYNC_CONTEXT, PlaceholderVisitor.asynchronousVisitor(), placeholder(expression));
     assertThat((CompletableFuture<?>) evaluation.evaluatedValue())
         .isCompletedWithValueMatching(evaluatedValue -> evaluatedValue.equals(expectedValue));
   }

@@ -23,6 +23,7 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/honey-common" />
             <option value="$PROJECT_DIR$/honey-kt-extension" />
+            <option value="$PROJECT_DIR$/honey-test-plugin" />
           </set>
         </option>
       </GradleProjectSettings>

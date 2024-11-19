@@ -2,12 +2,12 @@ package dev.shiza.honey.message.formatter;
 
 import dev.shiza.honey.message.Message;
 import dev.shiza.honey.message.compiler.MessageCompiler;
-import dev.shiza.honey.placeholder.evaluator.PlaceholderContext;
+import dev.shiza.honey.placeholder.PlaceholderContext;
 import dev.shiza.honey.placeholder.processor.PlaceholderProcessor;
 import dev.shiza.honey.placeholder.resolver.Placeholder;
 import dev.shiza.honey.placeholder.resolver.PlaceholderResolver;
 import dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizer;
-import dev.shiza.honey.placeholder.sanitizer.SanitizedPlaceholder;
+import dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizer.SanitizedPlaceholder;
 import dev.shiza.honey.processor.ProcessorRegistry;
 import java.util.List;
 import java.util.Set;

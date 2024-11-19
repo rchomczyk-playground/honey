@@ -1,10 +1,9 @@
 package dev.shiza.honey.placeholder.evaluator.reflection;
 
-import dev.shiza.honey.placeholder.evaluator.EvaluatedPlaceholder;
-import dev.shiza.honey.placeholder.evaluator.PlaceholderContext;
+import dev.shiza.honey.placeholder.PlaceholderContext;
 import dev.shiza.honey.placeholder.evaluator.PlaceholderEvaluator;
+import dev.shiza.honey.placeholder.evaluator.visitor.PlaceholderVisitor;
 import dev.shiza.honey.placeholder.resolver.Placeholder;
-import dev.shiza.honey.placeholder.visitor.PlaceholderVisitor;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;

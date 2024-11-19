@@ -3,8 +3,8 @@ package dev.shiza.honey.message.dispatcher;
 import com.spotify.futures.CompletableFutures;
 import dev.shiza.honey.message.Message;
 import dev.shiza.honey.message.dispatcher.MessageRenderer.DelegatingMessageRenderer;
-import dev.shiza.honey.message.dispatcher.MessageRenderer.FormattingMessageRenderer;
 import dev.shiza.honey.message.dispatcher.MessageRenderer.EmptyMessageRenderer;
+import dev.shiza.honey.message.dispatcher.MessageRenderer.FormattingMessageRenderer;
 import dev.shiza.honey.message.formatter.MessageFormatter;
 import java.util.concurrent.CompletableFuture;
 
@@ -22,40 +22,24 @@ public sealed interface MessageRenderer<RESULT>
    *
    * @param key the key for the variable
    * @param value the value to associate with the key
-   * @return a new instance of a message renderer with the variable added
-   * @throws MessageDispatchingException if the operation is not supported
+   * @return a new instance of a message renderer with the variable added if supported or same
+   *     instance
    */
-  default MessageRenderer<RESULT> variable(final String key, final Object value) {
-    throw new MessageDispatchingException(
-        "Cannot add variable to a non-formatting message renderer");
+  default MessageRenderer<RESULT> replace(final String key, final Object value) {
+    return this;
   }
 
   /**
-   * Adds a promised variable. This method may not be supported by non-formatting renderers.
-   *
-   * @param key the key for the variable
-   * @param value the value to associate with the key
-   * @return a new instance of a message renderer with the variable added
-   * @throws MessageDispatchingException if the operation is not supported
-   */
-  default MessageRenderer<RESULT> promisedVariable(final String key, final Object value) {
-    throw new MessageDispatchingException(
-        "Cannot add promised variable to a non-formatting message renderer");
-  }
-
-  /**
-   * Adds a promised variable to the message for asynchronous resolutions. This method may not be
-   * supported by non-formatting renderers.
+   * Adds an asynchronous variable to the message for asynchronous resolutions. This method may not
+   * be supported by non-formatting renderers.
    *
    * @param key the key for the variable
    * @param value the future promise of the value to associate with the key
-   * @return a new instance of a message renderer with the promised variable added
-   * @throws MessageDispatchingException if the operation is not supported
+   * @return a new instance of a message renderer with the variable added if supported or same
+   *     instance
    */
-  default MessageRenderer<RESULT> promisedVariable(
-      final String key, final CompletableFuture<Object> value) {
-    throw new MessageDispatchingException(
-        "Cannot add promised variable to a non-formatting message renderer");
+  default MessageRenderer<RESULT> replace(final String key, final CompletableFuture<Object> value) {
+    return this;
   }
 
   /**
@@ -94,7 +78,7 @@ public sealed interface MessageRenderer<RESULT>
 
   /**
    * A formatting message renderer that uses a specified message formatter and message to render
-   * output. Supports dynamic addition of variables and promises.
+   * output. Supports dynamic addition of variables and asynchronous variables.
    *
    * @param <RESULT> the type of the result of rendering
    * @param formatter the formatter to format the message
@@ -104,21 +88,16 @@ public sealed interface MessageRenderer<RESULT>
       implements MessageRenderer<RESULT> {
 
     @Override
-    public MessageRenderer<RESULT> variable(String key, Object value) {
+    public MessageRenderer<RESULT> replace(final String key, final Object value) {
       return new FormattingMessageRenderer<>(
           formatter, message.placeholders(it -> it.withValue(key, value)));
     }
 
     @Override
-    public MessageRenderer<RESULT> promisedVariable(String key, Object value) {
+    public MessageRenderer<RESULT> replace(
+        final String key, final CompletableFuture<Object> value) {
       return new FormattingMessageRenderer<>(
-          formatter, message.placeholders(it -> it.withPromisedValue(key, value)));
-    }
-
-    @Override
-    public MessageRenderer<RESULT> promisedVariable(String key, CompletableFuture<Object> value) {
-      return new FormattingMessageRenderer<>(
-          formatter, message.placeholders(it -> it.withPromisedValue(key, value)));
+          formatter, message.placeholders(it -> it.withAsynchronousValue(key, value)));
     }
 
     @Override

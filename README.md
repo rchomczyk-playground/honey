@@ -63,7 +63,7 @@ hasle on developer side.
 
 ```java
 AdventureMessageDispatcher.createTitle()
-    .recipient(event.getPlayer())
+    .viewer(event.getPlayer())
     .title(it -> it.template(formatter, "Hello!"))
     .subtitle(it -> it.template(formatter, "It is a pleasure to see you there {{player.getName}}"))
     .variable("player", event.getPlayer())
@@ -71,13 +71,13 @@ AdventureMessageDispatcher.createTitle()
     .dispatch();
 
 AdventureMessageDispatcher.createChat()
-    .recipient(Bukkit.getServer())
+    .viewer(Bukkit.getServer())
     .template(formatter, "{{player.getName}} has joined the server!")
     .variable("player", event.getPlayer())
     .dispatch();
 
 AdventureMessageDispatcher.createActionBar()
-    .recipient(event.getPlayer())
+    .viewer(event.getPlayer())
     .template(formatter, "Honey is great, isn't it?")
     .dispatch();
 ```
@@ -88,12 +88,12 @@ AdventureMessageDispatcher.createActionBar()
 
 ```java
 AdventureMessageDispatcher.createChat()
-    .recipient(Bukkit.getServer())
+    .viewer(Bukkit.getServer())
     .template(Component.text("Somebody joined to the server!").color(NamedTextColor.RED))
     .dispatch();
 
 AdventureMessageDispatcher.createActionBar()
-    .recipient(event.getPlayer())
+    .viewer(event.getPlayer())
     .template(Component.text("Honey is great, isn't it?"))
     .dispatch();
 ```
@@ -101,12 +101,12 @@ AdventureMessageDispatcher.createActionBar()
 ### Use case (honey-kt-extesion)
 ```kotlin
 AdventureMessageDispatcher.createChat()
-    .recipient(event.player)
+    .viewer(event.player)
     .template(Component.text("Hello!"))
     .dispatch()
 
 AdventureMessageDispatcher.createActionBar()
-    .recipient(event.player)
+    .viewer(event.player)
     .template(Component.text("This is an action bar message!"))
     .dispatch()
 
@@ -119,7 +119,7 @@ player.createActionBar()
     .dispatch()
 
 AdventureMessageDispatcher.createTitle()
-    .recipient(event.player)
+    .viewer(event.player)
     .title { it.template(Component.text("Hello!")) }
     .subtitle { it.template(Component.text("It's great to see you!")) }
     .times(2, 4, 2)
@@ -128,7 +128,7 @@ AdventureMessageDispatcher.createTitle()
 
 ### Synchronous vs asynchronous message dispatching
 - [dispatch](https://github.com/rchomczyk/honey/tree/main/honey-common/src/dev/shiza/honey/message/dispatcher/MessageBaseDispatcher.java#L71)
-  This method immediately delivers the message synchronously. It calls the deliver function with the rendered message and the recipient, and the action is completed immediately.
+  This method immediately delivers the message synchronously. It calls the deliver function with the rendered message and the viewer, and the action is completed immediately.
 
 - [dispatchAsync](https://github.com/rchomczyk/honey/tree/main/honey-common/src/dev/shiza/honey/message/dispatcher/MessageBaseDispatcher.java#L76)
   This method delivers the message asynchronously. It returns a CompletableFuture that performs the message rendering in the background and then delivers the result once it's ready. It allows non-blocking behavior and handles exceptions asynchronously.

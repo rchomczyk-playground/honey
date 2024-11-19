@@ -2,23 +2,24 @@ package dev.shiza.honey.message.dispatcher;
 
 import dev.shiza.honey.message.formatter.MessageFormatter;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.UnaryOperator;
 
 /**
  * The {@code MessageDispatcher} interface defines methods for configuring and dispatching messages
- * to a recipient.
+ * to a viewer.
  *
- * @param <VIEWER> the type of the recipient to whom the message will be sent
+ * @param <VIEWER> the type of the viewer to whom the message will be sent
  * @param <RESULT> the type of the result or content of the message
  */
 public interface MessageDispatcher<VIEWER, RESULT> {
 
   /**
-   * Sets the recipient of the message.
+   * Sets the viewer of the message.
    *
-   * @param recipient the recipient of the message
+   * @param viewer the viewer of the message
    * @return the current instance of {@code MessageDispatcher} for method chaining
    */
-  MessageDispatcher<VIEWER, RESULT> recipient(final VIEWER recipient);
+  MessageDispatcher<VIEWER, RESULT> viewer(final VIEWER viewer);
 
   /**
    * Sets the message template and formatter for the message.
@@ -38,33 +39,7 @@ public interface MessageDispatcher<VIEWER, RESULT> {
    */
   MessageDispatcher<VIEWER, RESULT> template(final RESULT message);
 
-  /**
-   * Adds a variable to the message context.
-   *
-   * @param key the key of the placeholder
-   * @param value the value of the placeholder
-   * @return the current instance of {@code MessageDispatcher} for method chaining
-   */
-  MessageDispatcher<VIEWER, RESULT> variable(final String key, final Object value);
-
-  /**
-   * Adds a promised variable to the message context. The value is provided asynchronously.
-   *
-   * @param key the key for the variable
-   * @param value the value of the variable
-   * @return the current instance of {@code MessageDispatcher} for method chaining
-   */
-  MessageDispatcher<VIEWER, RESULT> promisedVariable(final String key, final Object value);
-
-  /**
-   * Adds a promised variable to the message context. The value is provided asynchronously.
-   *
-   * @param key the key for the variable
-   * @param value the future object containing the value of the variable
-   * @return the current instance of {@code MessageDispatcher} for method chaining
-   */
-  MessageDispatcher<VIEWER, RESULT> promisedVariable(
-      final String key, final CompletableFuture<Object> value);
+  MessageDispatcher<VIEWER, RESULT> placeholders(final UnaryOperator<MessageRenderer<RESULT>> consumer);
 
   /** Dispatches the message synchronously. */
   void dispatch();

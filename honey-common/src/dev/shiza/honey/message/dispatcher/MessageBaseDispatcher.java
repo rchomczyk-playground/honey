@@ -7,13 +7,14 @@ import dev.shiza.honey.message.dispatcher.MessageRenderer.FormattingMessageRende
 import dev.shiza.honey.message.formatter.MessageFormatter;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
+import java.util.function.UnaryOperator;
 import org.jetbrains.annotations.ApiStatus.Internal;
 
 /**
 * Internal class representing a base dispatcher for messages.
 * This class is marked as final and cannot be subclassed.
 *
-* @param <VIEWER> the type of recipient for the message
+* @param <VIEWER> the type of viewer for the message
 * @param <RESULT> the type of message result
 */
 @Internal
@@ -21,31 +22,31 @@ public final class MessageBaseDispatcher<VIEWER, RESULT>
   implements MessageDispatcher<VIEWER, RESULT> {
 
   private final MessageRenderer<RESULT> renderer;
-  private final VIEWER recipient;
+  private final VIEWER viewer;
   private final BiConsumer<VIEWER, RESULT> deliver;
 
   private MessageBaseDispatcher(
     final MessageRenderer<RESULT> renderer,
-    final VIEWER recipient,
+    final VIEWER viewer,
     final BiConsumer<VIEWER, RESULT> deliver) {
     this.renderer = renderer;
-    this.recipient = recipient;
+    this.viewer = viewer;
     this.deliver = deliver;
   }
 
-  public MessageBaseDispatcher(final VIEWER recipient, final BiConsumer<VIEWER, RESULT> deliver) {
-    this(new EmptyMessageRenderer<>(), recipient, deliver);
+  public MessageBaseDispatcher(final VIEWER viewer, final BiConsumer<VIEWER, RESULT> deliver) {
+    this(new EmptyMessageRenderer<>(), viewer, deliver);
   }
 
   /**
-  * Replaces the current recipient with a new one and returns a new dispatcher instance.
+  * Replaces the current viewer with a new one and returns a new dispatcher instance.
   *
-  * @param recipient the new recipient of the message
-  * @return a new instance of MessageBaseDispatcher with the updated recipient
+  * @param viewer the new viewer of the message
+  * @return a new instance of MessageBaseDispatcher with the updated viewer
   */
   @Override
-  public MessageDispatcher<VIEWER, RESULT> recipient(final VIEWER recipient) {
-    return new MessageBaseDispatcher<>(renderer, recipient, deliver);
+  public MessageDispatcher<VIEWER, RESULT> viewer(final VIEWER viewer) {
+    return new MessageBaseDispatcher<>(renderer, viewer, deliver);
   }
 
   /**
@@ -59,7 +60,7 @@ public final class MessageBaseDispatcher<VIEWER, RESULT>
   public MessageDispatcher<VIEWER, RESULT> template(
     final MessageFormatter<RESULT> formatter, final String template) {
     return new MessageBaseDispatcher<>(
-             new FormattingMessageRenderer<>(formatter, Message.of(template)), recipient, deliver);
+             new FormattingMessageRenderer<>(formatter, Message.of(template)), viewer, deliver);
   }
 
   /**
@@ -71,61 +72,25 @@ public final class MessageBaseDispatcher<VIEWER, RESULT>
   @Override
   public MessageDispatcher<VIEWER, RESULT> template(final RESULT message) {
     return new MessageBaseDispatcher<>(
-             new DelegatingMessageRenderer<>(message), recipient, deliver);
+             new DelegatingMessageRenderer<>(message), viewer, deliver);
   }
 
-  /**
-  * Adds a variable to the message template and returns a new dispatcher instance.
-  *
-  * @param key the variable key
-  * @param value the variable value
-  * @return a new instance of MessageBaseDispatcher with the variable added
-  */
   @Override
-  public MessageDispatcher<VIEWER, RESULT> variable(final String key, final Object value) {
-    final MessageRenderer<RESULT> newRenderer = renderer.variable(key, value);
-    return new MessageBaseDispatcher<>(newRenderer, recipient, deliver);
+  public MessageDispatcher<VIEWER, RESULT> placeholders(
+      final UnaryOperator<MessageRenderer<RESULT>> consumer) {
+    return new MessageBaseDispatcher<>(consumer.apply(renderer), viewer, deliver);
   }
 
   /**
-  * Adds a promised variable to the message template and returns a new dispatcher instance.
-  *
-  * @param key the variable key
-  * @param value the promised variable value
-  * @return a new instance of MessageBaseDispatcher with the promised variable added
-  */
-  @Override
-  public MessageDispatcher<VIEWER, RESULT> promisedVariable(final String key, final Object value) {
-    final MessageRenderer<RESULT> newRenderer = renderer.promisedVariable(key, value);
-    return new MessageBaseDispatcher<>(newRenderer, recipient, deliver);
-  }
-
-  /**
-  * Adds a promised variable with a CompletableFuture to the message template
-  * and returns a new dispatcher instance.
-  *
-  * @param key the variable key
-  * @param value the CompletableFuture object representing the variable value
-  * @return a new instance of MessageBaseDispatcher with the promised variable added
-  */
-  @Override
-  public MessageDispatcher<VIEWER, RESULT> promisedVariable(
-    final String key, final CompletableFuture<Object> value) {
-    final MessageRenderer<RESULT> newRenderer = renderer.promisedVariable(key, value);
-    return new MessageBaseDispatcher<>(newRenderer, recipient, deliver);
-  }
-
-
-  /**
-  * Dispatches the rendered message to the recipient.
+  * Dispatches the rendered message to the viewer.
   */
   @Override
   public void dispatch() {
-    deliver.accept(recipient, renderer.render());
+    deliver.accept(viewer, renderer.render());
   }
 
   /**
-  * Asynchronously dispatches the rendered message to the recipient.
+  * Asynchronously dispatches the rendered message to the viewer.
   *
   * @return a CompletableFuture that completes when the message is dispatched
   * @throws MessageDispatchingException if an unexpected exception occurs during dispatch
@@ -134,7 +99,7 @@ public final class MessageBaseDispatcher<VIEWER, RESULT>
   public CompletableFuture<Void> dispatchAsync() {
     return renderer
            .renderAsync()
-           .thenAccept(result -> deliver.accept(recipient, result))
+           .thenAccept(result -> deliver.accept(viewer, result))
            .exceptionally(cause -> {
       throw new MessageDispatchingException(
         "Could not dispatch message, because of unexpected exception.", cause);

@@ -1,6 +1,6 @@
 package dev.shiza.honey.message.compiler;
 
-import dev.shiza.honey.placeholder.sanitizer.SanitizedPlaceholder;
+import dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizer.SanitizedPlaceholder;
 import java.util.List;
 
 /**

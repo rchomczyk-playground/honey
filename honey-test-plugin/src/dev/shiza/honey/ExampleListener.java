@@ -13,30 +13,31 @@ final class ExampleListener implements Listener {
 
   private final AdventureMessageFormatter formatter;
 
-  ExampleListener(
-      final AdventureMessageFormatter formatter) {
+  ExampleListener(final AdventureMessageFormatter formatter) {
     this.formatter = formatter;
   }
 
   @EventHandler
   public void onPlayerJoin(final PlayerJoinEvent event) {
     AdventureMessageDispatcher.createTitle()
-        .recipient(event.getPlayer())
-        .title(it -> it.template(formatter, "Hello!"))
+        .viewer(event.getPlayer())
+        .times(2, 4, 2)
+        .title(it -> it.template(formatter, "Hello {{number}}!"))
         .subtitle(
             it ->
-                it.template(formatter, "It is a pleasure to see you there {{player.getName}}")
-                    .variable("player", event.getPlayer()))
-        .times(2, 4, 2)
+                it.template(formatter, "It is a pleasure to see you there {{number}} {{player}}")
+                    .placeholders(
+                        environment -> environment.replace("player", event.getPlayer().getName())))
+        .placeholders(environment -> environment.replace("number", 15))
         .dispatch();
 
     AdventureMessageDispatcher.createChat()
-        .recipient(Bukkit.getServer())
+        .viewer(Bukkit.getServer())
         .template(Component.text("Somebody joined to the server!").color(NamedTextColor.RED))
         .dispatch();
 
     AdventureMessageDispatcher.createActionBar()
-        .recipient(event.getPlayer())
+        .viewer(event.getPlayer())
         .template(formatter, "Honey is great, isn't it?")
         .dispatch();
   }

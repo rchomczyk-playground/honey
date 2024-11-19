@@ -1,14 +1,15 @@
-package dev.shiza.honey.placeholder.sanitizer;
+package dev.shiza.honey.placeholder.adventure.placeholder.sanitizer;
 
-import static dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizerImplTestUtils.SANITIZER;
-import static dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizerImplTestUtils.placeholder;
+import static dev.shiza.honey.placeholder.adventure.placeholder.sanitizer.AdventurePlaceholderSanitizerTestUtils.REFLECTIVE_SANITIZER;
+import static dev.shiza.honey.placeholder.adventure.placeholder.sanitizer.AdventurePlaceholderSanitizerTestUtils.placeholder;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizer.SanitizedPlaceholder;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-class PlaceholderSanitizerImplTest {
+final class AdventureReflectivePlaceholderSanitizerTest {
 
   @Test
   void sanitizeContentWithoutPlaceholders() {
@@ -59,7 +60,7 @@ class PlaceholderSanitizerImplTest {
   @Test
   void sanitizeBunchOfPlaceholders() {
     assertThat(
-            SANITIZER.getSanitizedPlaceholders(
+            REFLECTIVE_SANITIZER.getSanitizedPlaceholders(
                 List.of(
                     placeholder("user"), placeholder("user.test"), placeholder("user.test.name"))))
         .extracting(SanitizedPlaceholder::key)
@@ -69,17 +70,17 @@ class PlaceholderSanitizerImplTest {
   private void assertContentSanitization(
       final String content, final List<String> expressions, final String expectedValue) {
     assertThat(
-            SANITIZER.getSanitizedContent(
+            REFLECTIVE_SANITIZER.getSanitizedContent(
                 content,
-                SANITIZER.getSanitizedPlaceholders(
+                REFLECTIVE_SANITIZER.getSanitizedPlaceholders(
                     expressions.stream()
-                        .map(PlaceholderSanitizerImplTestUtils::placeholder)
+                        .map(AdventurePlaceholderSanitizerTestUtils::placeholder)
                         .toList())))
         .isEqualTo(expectedValue);
   }
 
   private void assertPlaceholderSanitization(final String expression, final String expectedValue) {
-    assertThat(SANITIZER.getSanitizedPlaceholder(placeholder(expression)))
+    assertThat(REFLECTIVE_SANITIZER.getSanitizedPlaceholder(placeholder(expression)))
         .extracting(SanitizedPlaceholder::key)
         .isEqualTo(expectedValue);
   }
