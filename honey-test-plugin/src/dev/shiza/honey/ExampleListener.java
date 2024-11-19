@@ -11,34 +11,44 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 final class ExampleListener implements Listener {
 
-  private final AdventureMessageFormatter formatter;
+  private final AdventureMessageFormatter defaultMessageFormatter;
+  private final AdventureMessageFormatter reflectMessageFormatter;
 
-  ExampleListener(final AdventureMessageFormatter formatter) {
-    this.formatter = formatter;
+  ExampleListener(
+      final AdventureMessageFormatter defaultMessageFormatter,
+      final AdventureMessageFormatter reflectMessageFormatter) {
+    this.defaultMessageFormatter = defaultMessageFormatter;
+    this.reflectMessageFormatter = reflectMessageFormatter;
   }
 
   @EventHandler
   public void onPlayerJoin(final PlayerJoinEvent event) {
+    // 1) Using the default message formatter
     AdventureMessageDispatcher.createTitle()
         .viewer(event.getPlayer())
         .times(2, 4, 2)
-        .title(it -> it.template(formatter, "Hello {{number}}!"))
+        .title(it -> it.template(defaultMessageFormatter, "Hello {{number}}!"))
         .subtitle(
             it ->
-                it.template(formatter, "It is a pleasure to see you there {{number}} {{player}}")
+                it.template(
+                        defaultMessageFormatter,
+                        "It is a pleasure to see you there {{number}} {{player}}")
                     .placeholders(
-                        environment -> environment.replace("player", event.getPlayer().getName())))
-        .placeholders(environment -> environment.replace("number", 15))
+                        mapping -> mapping.replace("player", event.getPlayer().getName())))
+        .placeholders(mapping -> mapping.replace("number", 15))
         .dispatch();
 
+    // 2) Using the reflective message formatter
+    AdventureMessageDispatcher.createActionBar()
+        .viewer(event.getPlayer())
+        .template(reflectMessageFormatter, "Hello {{player.getName}}, {{player.getUniqueId}}!")
+        .placeholders(mapping -> mapping.replace("player", event.getPlayer()))
+        .dispatch();
+
+    // 3) Using dispatcher without any message formatter
     AdventureMessageDispatcher.createChat()
         .viewer(Bukkit.getServer())
         .template(Component.text("Somebody joined to the server!").color(NamedTextColor.RED))
-        .dispatch();
-
-    AdventureMessageDispatcher.createActionBar()
-        .viewer(event.getPlayer())
-        .template(formatter, "Honey is great, isn't it?")
         .dispatch();
   }
 }
