@@ -5,6 +5,7 @@ import dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizationException;
 import dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizer;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,58 +26,67 @@ final class AdventureReflectivePlaceholderSanitizer implements PlaceholderSaniti
   private static final Pattern TRANSFORMATION_PATTERN = Pattern.compile("[^a-z0-9_-]");
   private static final String MINI_MESSAGE_PLACEHOLDER_FORMAT = "<%s>";
 
+  private static final AdventureReflectiveTransformationPipeline TRANSFORMATION_PIPELINE =
+      new AdventureReflectiveTransformationPipeline(
+          List.of(
+              path -> PARANTHESE_PATTERN.matcher(path).replaceAll(""),
+              path -> DOT_PATTERN.matcher(path).replaceAll(""),
+              path -> ALPHANUMERICAL_PATTERN.matcher(path).replaceAll(""),
+              path -> path.toLowerCase(Locale.ROOT),
+              path -> TRANSFORMATION_PATTERN.matcher(path).replaceAll("")));
+
   AdventureReflectivePlaceholderSanitizer() {}
 
   @Override
   public String getSanitizedContent(
       final String content, final List<SanitizedPlaceholder> placeholders) {
-    String sanitizedContent = content;
-    for (final SanitizedPlaceholder placeholder : placeholders) {
-      sanitizedContent =
-          sanitizedContent.replace(
-              placeholder.expression(),
-              MINI_MESSAGE_PLACEHOLDER_FORMAT.formatted(placeholder.key()));
-    }
-    return sanitizedContent;
+    return placeholders.stream()
+        .reduce(
+            content,
+            (sanitized, placeholder) ->
+                sanitized.replace(
+                    placeholder.expression(),
+                    MINI_MESSAGE_PLACEHOLDER_FORMAT.formatted(placeholder.key())),
+            (a, b) -> b);
   }
 
   @Override
   public SanitizedPlaceholder getSanitizedPlaceholder(final EvaluatedPlaceholder placeholder) {
-    final Matcher matcher = PLACEHOLDER_PATTERN.matcher(placeholder.placeholder().key());
-    while (matcher.find()) {
-      final String expression = matcher.group(1);
-      final String sanitizedExpression = getSanitizedExpression(expression);
-      if (TAG_PATTERN.matcher(sanitizedExpression).matches()) {
-        return new SanitizedPlaceholder(
-            sanitizedExpression, placeholder.placeholder().key(), placeholder.evaluatedValue());
-      }
+    final String expression =
+        extractPlaceholderExpression(placeholder.placeholder().key())
+            .orElseThrow(
+                () ->
+                    new PlaceholderSanitizationException(
+                        "Could not sanitize placeholder with key: %s"
+                            .formatted(placeholder.placeholder().key())));
+
+    final String sanitizedExpression = getSanitizedExpression(expression);
+    if (!TAG_PATTERN.matcher(sanitizedExpression).matches()) {
+      throw new PlaceholderSanitizationException(
+          "Sanitized expression does not match tag pattern: %s".formatted(sanitizedExpression));
     }
 
-    throw new PlaceholderSanitizationException(
-        "Could not sanitize placeholder with key: %s".formatted(placeholder.placeholder().key()));
+    return new SanitizedPlaceholder(
+        sanitizedExpression, placeholder.placeholder().key(), placeholder.evaluatedValue());
+  }
+
+  private Optional<String> extractPlaceholderExpression(final String key) {
+    final Matcher matcher = PLACEHOLDER_PATTERN.matcher(key);
+    return matcher.find() ? Optional.of(matcher.group(1)) : Optional.empty();
   }
 
   private String getSanitizedExpression(final String expression) {
+    final Matcher methodCallMatcher = METHOD_CALL_PATTERN.matcher(expression);
+    final StringBuilder result = new StringBuilder();
     int lastEnd = 0;
 
-    final StringBuilder result = new StringBuilder();
-    final Matcher methodCallMatcher = METHOD_CALL_PATTERN.matcher(expression);
     while (methodCallMatcher.find()) {
       result.append(expression, lastEnd, methodCallMatcher.start());
-      String transformedMethodCall = methodCallMatcher.group();
-      transformedMethodCall = PARANTHESE_PATTERN.matcher(transformedMethodCall).replaceAll("");
-      transformedMethodCall = DOT_PATTERN.matcher(transformedMethodCall).replaceAll("");
-      transformedMethodCall = ALPHANUMERICAL_PATTERN.matcher(transformedMethodCall).replaceAll("");
-      transformedMethodCall = transformedMethodCall.toLowerCase(Locale.ROOT);
-      result.append(transformedMethodCall);
-
+      result.append(TRANSFORMATION_PIPELINE.apply(methodCallMatcher.group()));
       lastEnd = methodCallMatcher.end();
     }
-    result.append(expression.substring(lastEnd));
 
-    String transformedExpression = result.toString();
-    transformedExpression = TRANSFORMATION_PATTERN.matcher(transformedExpression).replaceAll("");
-    transformedExpression = transformedExpression.toLowerCase(Locale.ROOT);
-    return transformedExpression;
+    result.append(expression.substring(lastEnd));
+    return TRANSFORMATION_PIPELINE.apply(result.toString());
   }
 }

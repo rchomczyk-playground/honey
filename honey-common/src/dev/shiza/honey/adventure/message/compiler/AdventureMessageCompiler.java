@@ -46,12 +46,9 @@ final class AdventureMessageCompiler implements MessageCompiler<Component> {
    * @return An array of {@link TagResolver}.
    */
   private TagResolver[] getPlaceholderTags(final List<SanitizedPlaceholder> placeholders) {
-    final TagResolver[] tagResolvers = new TagResolver[placeholders.size()];
-    for (int index = 0; index < tagResolvers.length; index++) {
-      final SanitizedPlaceholder placeholder = placeholders.get(index);
-      tagResolvers[index] = getPlaceholderTags(placeholder.key(), placeholder.evaluatedValue());
-    }
-    return tagResolvers;
+    return placeholders.stream()
+        .map(placeholder -> getPlaceholderTags(placeholder.key(), placeholder.evaluatedValue()))
+        .toArray(TagResolver[]::new);
   }
 
   /**

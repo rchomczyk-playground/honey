@@ -20,29 +20,23 @@ final class AdventurePlaceholderSanitizer implements PlaceholderSanitizer {
   @Override
   public String getSanitizedContent(
       final String content, final List<SanitizedPlaceholder> placeholders) {
-    final Matcher matcher = PLACEHOLDER_PATTERN.matcher(content);
-
-    final StringBuilder result = new StringBuilder();
-    while (matcher.find()) {
-      matcher.appendReplacement(
-          result, MINI_MESSAGE_PLACEHOLDER_FORMAT.formatted(matcher.group(1)));
-    }
-
-    matcher.appendTail(result);
-    return result.toString();
+    return processPlaceholders(content, MINI_MESSAGE_PLACEHOLDER_FORMAT);
   }
 
   @Override
   public SanitizedPlaceholder getSanitizedPlaceholder(final EvaluatedPlaceholder placeholder) {
-    final Matcher matcher = PLACEHOLDER_PATTERN.matcher(placeholder.placeholder().key());
+    final String sanitized = processPlaceholders(placeholder.placeholder().key(), "%s");
+    return new SanitizedPlaceholder(
+        sanitized, placeholder.placeholder().key(), placeholder.evaluatedValue());
+  }
 
+  private String processPlaceholders(final String input, final String format) {
+    final Matcher matcher = PLACEHOLDER_PATTERN.matcher(input);
     final StringBuilder result = new StringBuilder();
     while (matcher.find()) {
-      matcher.appendReplacement(result, matcher.group(1));
+      matcher.appendReplacement(result, format.formatted(matcher.group(1)));
     }
-
     matcher.appendTail(result);
-    return new SanitizedPlaceholder(
-        result.toString(), placeholder.placeholder().key(), placeholder.evaluatedValue());
+    return result.toString();
   }
 }
