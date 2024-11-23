@@ -23,11 +23,11 @@ maven { url 'https://repo.shiza.dev/releases' }
 ##### Add dependency
 
 ```kotlin
-implementation("dev.shiza:honey:2.1.0")
+implementation("dev.shiza:honey:2.2.0")
 ```
 
 ```groovy
-implementation 'dev.shiza:honey:2.1.0'
+implementation 'dev.shiza:honey:2.2.0'
 ```
 
 #### Maven
@@ -45,7 +45,7 @@ implementation 'dev.shiza:honey:2.1.0'
 <dependency>
   <groupId>dev.shiza</groupId>
   <artifactId>honey</artifactId>
-  <version>2.1.0</version>
+  <version>2.2.0</version>
 </dependency>
 ```
 
