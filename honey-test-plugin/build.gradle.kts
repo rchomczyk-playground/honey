@@ -16,6 +16,8 @@ dependencies {
 
 dependencies {
     implementation(project(":honey-common"))
+    implementation(project(":honey-configs:honey-configs-okaeri"))
+    implementation(libs.okaeri.configs.yaml.bukkit)
 }
 
 java {

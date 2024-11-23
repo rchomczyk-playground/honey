@@ -7,7 +7,6 @@ import dev.shiza.honey.message.dispatcher.MessageDispatcher;
 import dev.shiza.honey.message.dispatcher.MessageRenderer;
 import dev.shiza.honey.message.dispatcher.TitleMessageDispatcher;
 import java.time.Duration;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.UnaryOperator;
 import net.kyori.adventure.audience.Audience;
@@ -116,9 +115,9 @@ public final class AdventureTitleMessageDispatcher
   public TitleMessageDispatcher<Audience, Component> placeholders(
       final UnaryOperator<MessageRenderer<Component>> consumer) {
     return new AdventureTitleMessageDispatcher(
-        times.placeholders(consumer),
-        title.placeholders(consumer),
-        subtitle.placeholders(consumer),
+        (MessageDispatcher<Audience, Component>) times.placeholders(consumer),
+        (MessageDispatcher<Audience, Component>) title.placeholders(consumer),
+        (MessageDispatcher<Audience, Component>) subtitle.placeholders(consumer),
         viewer);
   }
 
@@ -148,11 +147,12 @@ public final class AdventureTitleMessageDispatcher
    *     indicating when all dispatches are complete
    */
   @Override
-  public CompletableFuture<List<Void>> dispatchAsync() {
+  public CompletableFuture<Void> dispatchAsync() {
     return CompletableFutures.allAsList(
-        ImmutableList.of(
-            times.viewer(viewer).dispatchAsync(),
-            title.viewer(viewer).dispatchAsync(),
-            subtitle.viewer(viewer).dispatchAsync()));
+            ImmutableList.of(
+                times.viewer(viewer).dispatchAsync(),
+                title.viewer(viewer).dispatchAsync(),
+                subtitle.viewer(viewer).dispatchAsync()))
+        .thenAccept(__ -> {});
   }
 }

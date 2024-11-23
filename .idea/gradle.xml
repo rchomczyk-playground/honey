@@ -22,6 +22,9 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/honey-common" />
+            <option value="$PROJECT_DIR$/honey-configs" />
+            <option value="$PROJECT_DIR$/honey-configs/honey-configs-common" />
+            <option value="$PROJECT_DIR$/honey-configs/honey-configs-okaeri" />
             <option value="$PROJECT_DIR$/honey-kt-extension" />
           </set>
         </option>

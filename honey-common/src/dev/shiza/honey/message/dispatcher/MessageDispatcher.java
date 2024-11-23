@@ -1,7 +1,6 @@
 package dev.shiza.honey.message.dispatcher;
 
 import dev.shiza.honey.message.formatter.MessageFormatter;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.UnaryOperator;
 
 /**
@@ -11,14 +10,9 @@ import java.util.function.UnaryOperator;
  * @param <VIEWER> the type of the viewer to whom the message will be sent
  * @param <RESULT> the type of the result or content of the message
  */
-public interface MessageDispatcher<VIEWER, RESULT> {
+public interface MessageDispatcher<VIEWER, RESULT> extends MessagePolyDispatcher<VIEWER, RESULT> {
 
-  /**
-   * Sets the viewer of the message.
-   *
-   * @param viewer the viewer of the message
-   * @return the current instance of {@code MessageDispatcher} for method chaining
-   */
+  @Override
   MessageDispatcher<VIEWER, RESULT> viewer(final VIEWER viewer);
 
   /**
@@ -39,15 +33,7 @@ public interface MessageDispatcher<VIEWER, RESULT> {
    */
   MessageDispatcher<VIEWER, RESULT> template(final RESULT message);
 
-  MessageDispatcher<VIEWER, RESULT> placeholders(final UnaryOperator<MessageRenderer<RESULT>> consumer);
-
-  /** Dispatches the message synchronously. */
-  void dispatch();
-
-  /**
-   * Dispatches the message asynchronously.
-   *
-   * @return a {@link CompletableFuture} that is completed when the dispatch is done
-   */
-  CompletableFuture<Void> dispatchAsync();
+  @Override
+  MessageDispatcher<VIEWER, RESULT> placeholders(
+      final UnaryOperator<MessageRenderer<RESULT>> consumer);
 }

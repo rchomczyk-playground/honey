@@ -11,12 +11,18 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 final class ExampleListener implements Listener {
 
+  private final ExamplePlugin examplePlugin;
+  private final ExampleConfig exampleConfig;
   private final AdventureMessageFormatter defaultMessageFormatter;
   private final AdventureMessageFormatter reflectMessageFormatter;
 
   ExampleListener(
+      final ExamplePlugin examplePlugin,
+      final ExampleConfig exampleConfig,
       final AdventureMessageFormatter defaultMessageFormatter,
       final AdventureMessageFormatter reflectMessageFormatter) {
+    this.examplePlugin = examplePlugin;
+    this.exampleConfig = exampleConfig;
     this.defaultMessageFormatter = defaultMessageFormatter;
     this.reflectMessageFormatter = reflectMessageFormatter;
   }
@@ -50,5 +56,20 @@ final class ExampleListener implements Listener {
         .viewer(Bukkit.getServer())
         .template(Component.text("Somebody joined to the server!").color(NamedTextColor.RED))
         .dispatch();
+
+    // 4) Using dispatcher configurers with configuration
+    examplePlugin
+        .getServer()
+        .getScheduler()
+        .runTaskLater(
+            examplePlugin,
+            () ->
+                exampleConfig
+                    .greeting
+                    .dispatcher(reflectMessageFormatter)
+                    .viewer(event.getPlayer())
+                    .placeholders(mapping -> mapping.replace("player", event.getPlayer()))
+                    .dispatch(),
+            20 * 15L);
   }
 }
