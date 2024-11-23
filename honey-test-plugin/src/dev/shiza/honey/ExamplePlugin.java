@@ -1,6 +1,7 @@
 package dev.shiza.honey;
 
 import dev.shiza.honey.adventure.message.compiler.AdventureMessageCompilerFactory;
+import dev.shiza.honey.adventure.message.dispatcher.AdventureMessageSerdesPack;
 import dev.shiza.honey.adventure.message.formatter.AdventureMessageFormatter;
 import dev.shiza.honey.adventure.message.formatter.AdventureMessageFormatterFactory;
 import dev.shiza.honey.adventure.placeholder.sanitizer.AdventurePlaceholderSanitizerFactory;
@@ -16,6 +17,8 @@ import dev.shiza.honey.placeholder.resolver.PlaceholderResolverFactory;
 import dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizer;
 import dev.shiza.honey.processor.ProcessorRegistry;
 import dev.shiza.honey.processor.ProcessorRegistryFactory;
+import eu.okaeri.configs.ConfigManager;
+import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import net.kyori.adventure.text.Component;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,9 +26,26 @@ public final class ExamplePlugin extends JavaPlugin {
 
   @Override
   public void onEnable() {
-    final AdventureMessageFormatter defaultMessageFormatter = AdventureMessageFormatterFactory.create();
+    final AdventureMessageFormatter defaultMessageFormatter =
+        AdventureMessageFormatterFactory.create();
     final AdventureMessageFormatter reflectMessageFormatter = createReflectMessageFormatter();
-    getServer().getPluginManager().registerEvents(new ExampleListener(defaultMessageFormatter, reflectMessageFormatter), this);
+
+    final ExampleConfig exampleConfig =
+        ConfigManager.create(
+            ExampleConfig.class,
+            initializer ->
+                initializer
+                    .withConfigurer(new YamlSnakeYamlConfigurer(), new AdventureMessageSerdesPack())
+                    .withBindFile(getDataPath().resolve("config.yml"))
+                    .saveDefaults()
+                    .load(true));
+
+    getServer()
+        .getPluginManager()
+        .registerEvents(
+            new ExampleListener(
+                this, exampleConfig, defaultMessageFormatter, reflectMessageFormatter),
+            this);
   }
 
   private AdventureMessageFormatter createReflectMessageFormatter() {

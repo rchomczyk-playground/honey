@@ -1,7 +1,5 @@
 package dev.shiza.honey.message.dispatcher;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.UnaryOperator;
 
 /**
@@ -11,7 +9,11 @@ import java.util.function.UnaryOperator;
  * @param <VIEWER> The type of the viewer for whom the messages are intended.
  * @param <RESULT> The result type for operations that are performed by the MessageDispatcher.
  */
-public interface TitleMessageDispatcher<VIEWER, RESULT> {
+public interface TitleMessageDispatcher<VIEWER, RESULT>
+    extends MessagePolyDispatcher<VIEWER, RESULT> {
+
+  @Override
+  TitleMessageDispatcher<VIEWER, RESULT> viewer(final VIEWER viewer);
 
   /**
    * Configures the display times of the title message.
@@ -41,25 +43,7 @@ public interface TitleMessageDispatcher<VIEWER, RESULT> {
   TitleMessageDispatcher<VIEWER, RESULT> subtitle(
       final UnaryOperator<MessageDispatcher<VIEWER, RESULT>> consumer);
 
+  @Override
   TitleMessageDispatcher<VIEWER, RESULT> placeholders(
       final UnaryOperator<MessageRenderer<RESULT>> consumer);
-
-  /**
-   * Sets the viewer of the title message.
-   *
-   * @param viewer The viewer who will receive the message.
-   * @return An instance of TitleMessageDispatcher for method chaining.
-   */
-  TitleMessageDispatcher<VIEWER, RESULT> viewer(final VIEWER viewer);
-
-  /** Dispatches the title and subtitle to the viewer synchronously. */
-  void dispatch();
-
-  /**
-   * Dispatches the title and subtitle to the viewer asynchronously.
-   *
-   * @return A CompletableFuture that completes with a list of results (normally empty) once the
-   *     message dispatch operation is complete.
-   */
-  CompletableFuture<List<Void>> dispatchAsync();
 }
