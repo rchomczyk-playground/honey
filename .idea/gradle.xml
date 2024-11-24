@@ -26,7 +26,6 @@
             <option value="$PROJECT_DIR$/honey-configs/honey-configs-common" />
             <option value="$PROJECT_DIR$/honey-configs/honey-configs-okaeri" />
             <option value="$PROJECT_DIR$/honey-kt-extension" />
-            <option value="$PROJECT_DIR$/honey-test-plugin" />
           </set>
         </option>
       </GradleProjectSettings>
