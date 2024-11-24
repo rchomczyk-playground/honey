@@ -2,6 +2,7 @@ package dev.shiza.honey;
 
 import dev.shiza.honey.adventure.message.dispatcher.AdventureMessageDispatcher;
 import dev.shiza.honey.adventure.message.formatter.AdventureMessageFormatter;
+import java.time.Duration;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -33,15 +34,22 @@ final class ExampleListener implements Listener {
     AdventureMessageDispatcher.createTitle()
         .viewer(event.getPlayer())
         .times(2, 4, 2)
-        .title(it -> it.template(defaultMessageFormatter, "Hello {{number}}!"))
+        .title(it -> it.template(defaultMessageFormatter, "Hello {{duration}}!"))
         .subtitle(
             it ->
                 it.template(
                         defaultMessageFormatter,
                         "It is a pleasure to see you there {{number}} {{player}}")
                     .placeholders(
-                        mapping -> mapping.replace("player", event.getPlayer().getName())))
-        .placeholders(mapping -> mapping.replace("number", 15))
+                        mapping ->
+                            mapping
+                                .replace("number", 5)
+                                .replace("player", event.getPlayer().getName())))
+        .placeholders(
+            mapping ->
+                mapping.replace(
+                    "duration",
+                    Duration.ofDays(2).plus(Duration.ofHours(12).plus(Duration.ofMinutes(30)))))
         .dispatch();
 
     // 2) Using the reflective message formatter

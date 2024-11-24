@@ -8,6 +8,7 @@ import dev.shiza.honey.placeholder.resolver.Placeholder;
 import dev.shiza.honey.placeholder.resolver.PlaceholderResolver;
 import dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizer;
 import dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizer.SanitizedPlaceholder;
+import dev.shiza.honey.processor.ProcessorPhase;
 import dev.shiza.honey.processor.ProcessorRegistry;
 import java.util.List;
 import java.util.Set;
@@ -52,14 +53,19 @@ public abstract class MessageBaseFormatter<T> implements MessageFormatter<T> {
    */
   @Override
   public T format(final Message message) {
-    final Set<Placeholder> placeholders = placeholderResolver.resolve(message.content());
+    final String preprocessedContent =
+        processorRegistry.process(ProcessorPhase.PREPROCESS, message.content());
+    final Message preprocessedMessage = new Message(preprocessedContent, message.context());
+
+    final Set<Placeholder> placeholders = placeholderResolver.resolve(preprocessedContent);
     if (placeholders.isEmpty()) {
-      return compile(message, List.of());
+      return compile(preprocessedMessage, List.of());
     }
 
     final List<SanitizedPlaceholder> sanitizedPlaceholders =
-        placeholderProcessor.process(message.context().merge(placeholderContext), placeholders);
-    return compile(message, sanitizedPlaceholders);
+        placeholderProcessor.process(
+            preprocessedMessage.context().merge(placeholderContext), placeholders);
+    return compile(preprocessedMessage, sanitizedPlaceholders);
   }
 
   /**
@@ -89,7 +95,8 @@ public abstract class MessageBaseFormatter<T> implements MessageFormatter<T> {
    * @return The compiled message of type T.
    */
   private T compile(final Message message, final List<SanitizedPlaceholder> placeholders) {
-    final String processedContent = processorRegistry.preprocess(message.content());
+    final String processedContent =
+        processorRegistry.process(ProcessorPhase.POSTPROCESS, message.content());
     final String sanitizedContent =
         placeholderSanitizer.getSanitizedContent(processedContent, placeholders);
     return messageCompiler.compile(sanitizedContent, placeholders);

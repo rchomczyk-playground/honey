@@ -6,6 +6,7 @@ import dev.shiza.honey.adventure.message.formatter.AdventureMessageFormatter;
 import dev.shiza.honey.adventure.message.formatter.AdventureMessageFormatterFactory;
 import dev.shiza.honey.adventure.placeholder.sanitizer.AdventurePlaceholderSanitizerFactory;
 import dev.shiza.honey.conversion.ImplicitConversion;
+import dev.shiza.honey.conversion.ImplicitConversionUnit;
 import dev.shiza.honey.message.compiler.MessageCompiler;
 import dev.shiza.honey.placeholder.PlaceholderContext;
 import dev.shiza.honey.placeholder.evaluator.PlaceholderEvaluator;
@@ -15,10 +16,12 @@ import dev.shiza.honey.placeholder.processor.PlaceholderProcessorFactory;
 import dev.shiza.honey.placeholder.resolver.PlaceholderResolver;
 import dev.shiza.honey.placeholder.resolver.PlaceholderResolverFactory;
 import dev.shiza.honey.placeholder.sanitizer.PlaceholderSanitizer;
+import dev.shiza.honey.processor.ProcessorPhase;
 import dev.shiza.honey.processor.ProcessorRegistry;
 import dev.shiza.honey.processor.ProcessorRegistryFactory;
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
+import java.time.Duration;
 import net.kyori.adventure.text.Component;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -50,7 +53,9 @@ public final class ExamplePlugin extends JavaPlugin {
 
   private AdventureMessageFormatter createReflectMessageFormatter() {
     final MessageCompiler<Component> messageCompiler = AdventureMessageCompilerFactory.create();
-    final ImplicitConversion implicitConversion = ImplicitConversion.create();
+    final ImplicitConversion implicitConversion =
+        ImplicitConversion.create(
+            ImplicitConversionUnit.unchecked(Duration.class, String.class, Duration::toString));
     final PlaceholderContext placeholderContext = PlaceholderContext.create();
     final PlaceholderResolver placeholderResolver = PlaceholderResolverFactory.create();
     final PlaceholderSanitizer placeholderSanitizer =
@@ -60,7 +65,10 @@ public final class ExamplePlugin extends JavaPlugin {
     final PlaceholderProcessor placeholderProcessor =
         PlaceholderProcessorFactory.create(
             placeholderEvaluator, placeholderSanitizer, implicitConversion);
-    final ProcessorRegistry processorRegistry = ProcessorRegistryFactory.create();
+    final ProcessorRegistry processorRegistry =
+        ProcessorRegistryFactory.create()
+            .processor(ProcessorPhase.PREPROCESS, content -> content + " {{player.getName}}")
+            .processor(ProcessorPhase.POSTPROCESS, content -> content + " {{player.getUniqueId}}");
     return AdventureMessageFormatterFactory.create(
         messageCompiler,
         placeholderContext,
