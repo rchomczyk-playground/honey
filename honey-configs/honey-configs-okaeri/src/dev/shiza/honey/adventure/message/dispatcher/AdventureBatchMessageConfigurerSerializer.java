@@ -36,12 +36,10 @@ final class AdventureBatchMessageConfigurerSerializer
   @Override
   public AdventureBatchMessageConfigurer deserialize(
       final @NotNull DeserializationData data, final @NotNull GenericsDeclaration generics) {
-    final boolean isPolyConfigurer =
-        data.getRaw(VALUE) instanceof MessagePolyConfigurer<?, ?>;
-    final boolean isSomeConfigurer =
-        data.getRaw(VALUE) instanceof Map<?, ?> map
-            && map.containsKey(AdventureMessageDelivery.ACTION_BAR.id());
-    if (isPolyConfigurer || isSomeConfigurer) {
+    final Object rawValue = data.getRaw(VALUE);
+    if (rawValue instanceof MessagePolyConfigurer<?, ?>
+        || rawValue instanceof Map<?, ?>
+        || rawValue instanceof String) {
       return new AdventureBatchMessageConfigurer()
           .add(data.get(VALUE, MessagePolyConfigurer.class));
     }
