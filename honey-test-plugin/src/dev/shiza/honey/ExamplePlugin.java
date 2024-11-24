@@ -67,7 +67,9 @@ public final class ExamplePlugin extends JavaPlugin {
             placeholderEvaluator, placeholderSanitizer, implicitConversion);
     final ProcessorRegistry processorRegistry =
         ProcessorRegistryFactory.create()
+            // 1) It will process placeholders in this phase.
             .processor(ProcessorPhase.PREPROCESS, content -> content + " {{player.getName}}")
+            // 2) It will not process placeholders in this phase.
             .processor(ProcessorPhase.POSTPROCESS, content -> content + " {{player.getUniqueId}}");
     return AdventureMessageFormatterFactory.create(
         messageCompiler,
