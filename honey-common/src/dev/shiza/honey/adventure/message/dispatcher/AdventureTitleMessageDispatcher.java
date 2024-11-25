@@ -115,9 +115,9 @@ public final class AdventureTitleMessageDispatcher
   public TitleMessageDispatcher<Audience, Component> placeholders(
       final UnaryOperator<MessageRenderer<Component>> consumer) {
     return new AdventureTitleMessageDispatcher(
-        (MessageDispatcher<Audience, Component>) times.placeholders(consumer),
-        (MessageDispatcher<Audience, Component>) title.placeholders(consumer),
-        (MessageDispatcher<Audience, Component>) subtitle.placeholders(consumer),
+        times.placeholders(consumer),
+        title.placeholders(consumer),
+        subtitle.placeholders(consumer),
         viewer);
   }
 
