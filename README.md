@@ -27,7 +27,7 @@ implementation("dev.shiza:honey:2.2.2")
 ```
 
 ```groovy
-implementation 'dev.shiza:honey:2.2.2'
+implementation 'dev.shiza:honey:2.2.2' 
 ```
 
 #### Maven
