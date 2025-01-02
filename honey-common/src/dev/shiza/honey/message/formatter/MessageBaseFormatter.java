@@ -13,14 +13,12 @@ import dev.shiza.honey.processor.ProcessorRegistry;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import org.jetbrains.annotations.ApiStatus.Internal;
 
 /**
  * Abstract base class for formatting messages that encapsulates common logic.
  *
  * @param <T> The type of the output formatted message.
  */
-@Internal
 public abstract class MessageBaseFormatter<T> implements MessageFormatter<T> {
 
   private final MessageCompiler<T> messageCompiler;
